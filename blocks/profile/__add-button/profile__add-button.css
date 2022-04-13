@@ -1,4 +1,5 @@
 .profile__add-button {
+  background-color: black;
   border: 2px solid #FFF;
   display: inline-block;
   box-sizing: border-box;
@@ -8,7 +9,7 @@
   height: 50px;
 }
 
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 1080px) {
   .profile__add-button {
     width: 282px;
     margin: 0;
