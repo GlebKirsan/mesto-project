@@ -1,76 +1,91 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mesto</title>
   <link href="./pages/index.css" rel="stylesheet">
 </head>
+
 <body class="page">
-<header class="header">
-  <div class="header__container">
-    <img src="./images/logo.svg" alt="Лого" class="logo">
-  </div>
-</header>
-<main class="content">
-  <section class="profile">
-    <img src="./images/profile-image.jpg" alt="Аватарка пользователя" class="profile__avatar">
-    <div class="profile__info">
-      <h1 class="profile__name">Жак-Ив Кусто</h1>
-      <button class="button profile__edit-button"></button>
-      <p class="profile__description">Исследователь океана</p>
+  <header class="header">
+    <div class="header__container">
+      <img src="./images/logo.svg" alt="Лого" class="logo">
     </div>
-    <button class="button profile__add-button"></button>
-  </section>
-  <section class="photo-grid">
-    <ul class="photo-grid__items">
-      <li class="photo-grid__item">
-        <img class="photo-grid__image" src="./images/item-1.jpg" alt="Волшебник из D&D">
-        <div class="photo-grid__item-info">
-          <p class="photo-grid__name">Волшебник</p>
-          <button class="button photo-grid__like"></button>
-        </div>
-      </li>
-      <li class="photo-grid__item">
-        <img class="photo-grid__image" src="./images/item-2.jpg" alt="Иллитид над картой">
-        <div class="photo-grid__item-info">
-          <p class="photo-grid__name">Иллитид над картой подземелья</p>
-          <button class="button photo-grid__like photo-grid__like_active"></button>
-        </div>
-      </li>
-      <li class="photo-grid__item">
-        <img class="photo-grid__image" src="./images/item-3.jpg" alt="Вампир Страд">
-        <div class="photo-grid__item-info">
-          <p class="photo-grid__name">Страд фон Зарович</p>
-          <button class="button photo-grid__like photo-grid__like_active"></button>
-        </div>
-      </li>
-      <li class="photo-grid__item">
-        <img class="photo-grid__image" src="./images/item-4.jpg" alt="Пятиглавый дракон Тиамат">
-        <div class="photo-grid__item-info">
-          <p class="photo-grid__name">Пятиглавый дракон Тиамат</p>
-          <button class="button photo-grid__like"></button>
-        </div>
-      </li>
-      <li class="photo-grid__item">
-        <img class="photo-grid__image" src="./images/item-5.jpg" alt="Представитель расы голиафов">
-        <div class="photo-grid__item-info">
-          <p class="photo-grid__name">Голиаф</p>
-          <button class="button photo-grid__like"></button>
-        </div>
-      </li>
-      <li class="photo-grid__item">
-        <img class="photo-grid__image" src="./images/item-6.jpg" alt="Изобретатель из D&D">
-        <div class="photo-grid__item-info">
-          <p class="photo-grid__name">Изобретатель</p>
-          <button class="button photo-grid__like"></button>
-        </div>
-      </li>
-    </ul>
-  </section>
-</main>
-<footer class="footer">
-  <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
-</footer>
+  </header>
+  <main class="content">
+    <div class="popup">
+      <form class="popup__container">
+        <button class="button popup__close-button"></button>
+        <h2 class="popup__title">Редактировать профиль</h2>
+        <fieldset class="popup__profile-info">
+          <input class="popup__input popup__input_data_name" type="text" name="fullname" value="Жак-Ив Кусто">
+          <input class="popup__input popup__input_data_description" type="text" name="description"
+            value="Исследователь океана">
+        </fieldset>
+        <button class="button popup__submit-button" type="submit">Сохранить</button>
+      </form>
+    </div>
+    <section class="profile">
+      <img src="./images/profile-image.jpg" alt="Аватарка пользователя" class="profile__avatar">
+      <div class="profile__info">
+        <h1 class="profile__name">Жак-Ив Кусто</h1>
+        <button class="button profile__edit-button"></button>
+        <p class="profile__description">Исследователь океана</p>
+      </div>
+      <button class="button profile__add-button"></button>
+    </section>
+    <section class="photo-grid">
+      <ul class="photo-grid__items">
+        <li class="photo-grid__item">
+          <img class="photo-grid__image" src="./images/item-1.jpg" alt="Волшебник из D&D">
+          <div class="photo-grid__item-info">
+            <p class="photo-grid__name">Волшебник</p>
+            <button class="button photo-grid__like"></button>
+          </div>
+        </li>
+        <li class="photo-grid__item">
+          <img class="photo-grid__image" src="./images/item-2.jpg" alt="Иллитид над картой">
+          <div class="photo-grid__item-info">
+            <p class="photo-grid__name">Иллитид над картой подземелья</p>
+            <button class="button photo-grid__like photo-grid__like_active"></button>
+          </div>
+        </li>
+        <li class="photo-grid__item">
+          <img class="photo-grid__image" src="./images/item-3.jpg" alt="Вампир Страд">
+          <div class="photo-grid__item-info">
+            <p class="photo-grid__name">Страд фон Зарович</p>
+            <button class="button photo-grid__like photo-grid__like_active"></button>
+          </div>
+        </li>
+        <li class="photo-grid__item">
+          <img class="photo-grid__image" src="./images/item-4.jpg" alt="Пятиглавый дракон Тиамат">
+          <div class="photo-grid__item-info">
+            <p class="photo-grid__name">Пятиглавый дракон Тиамат</p>
+            <button class="button photo-grid__like"></button>
+          </div>
+        </li>
+        <li class="photo-grid__item">
+          <img class="photo-grid__image" src="./images/item-5.jpg" alt="Представитель расы голиафов">
+          <div class="photo-grid__item-info">
+            <p class="photo-grid__name">Голиаф</p>
+            <button class="button photo-grid__like"></button>
+          </div>
+        </li>
+        <li class="photo-grid__item">
+          <img class="photo-grid__image" src="./images/item-6.jpg" alt="Изобретатель из D&D">
+          <div class="photo-grid__item-info">
+            <p class="photo-grid__name">Изобретатель</p>
+            <button class="button photo-grid__like"></button>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </main>
+  <footer class="footer">
+    <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
+  </footer>
 </body>
+
 </html>

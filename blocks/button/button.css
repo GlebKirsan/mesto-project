@@ -4,7 +4,3 @@
   transition: opacity linear 100ms;
   cursor: pointer;
 }
-
-.button:hover {
-  opacity: 0.6;
-}
