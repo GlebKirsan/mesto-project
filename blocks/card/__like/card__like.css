@@ -1,4 +1,4 @@
-.photo-grid__like {
+.card__like {
   background-color: transparent;
   width: 22px;
   height: 19px;
@@ -6,6 +6,6 @@
   background-image: url("../../../images/like.svg");
 }
 
-.photo-grid__like:hover {
+.card__like:hover {
   opacity: 0.5;
 }
