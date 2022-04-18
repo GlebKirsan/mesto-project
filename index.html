@@ -9,82 +9,98 @@
 </head>
 
 <body class="page">
-  <header class="header">
-    <img src="./images/logo.svg" alt="Лого" class="logo">
-  </header>
-  <main class="content">
-    <section class="profile">
-      <img src="./images/profile-image.jpg" alt="Аватарка пользователя" class="profile__avatar">
-      <div class="profile__info">
-        <h1 class="profile__name">Жак-Ив Кусто</h1>
-        <button type="button" class="button profile__edit-button" area-label="Редактировать профиль"></button>
-        <p class="profile__description">Исследователь океана</p>
-      </div>
-      <button type="button" class="button profile__add-button" area-label="Добавить фотографию"></button>
-    </section>
-    <section class="photo-grid">
-      <ul class="cards">
-        <li class="card">
-          <img class="card__image" src="./images/item-1.jpg" alt="Волшебник из D&D">
-          <div class="card__info">
-            <h2 class="card__name">Волшебник</h2>
-            <button type="button" class="button card__like" area-label="Лайк"></button>
-          </div>
-        </li>
-        <li class="card">
-          <img class="card__image" src="./images/item-2.jpg" alt="Иллитид над картой">
-          <div class="card__info">
-            <h2 class="card__name">Иллитид над картой подземелья</h2>
-            <button type="button" class="button card__like card__like_active" area-label="Лайк"></button>
-          </div>
-        </li>
-        <li class="card">
-          <img class="card__image" src="./images/item-3.jpg" alt="Вампир Страд">
-          <div class="card__info">
-            <h2 class="card__name">Страд фон Зарович</h2>
-            <button type="button" class="button card__like card__like_active" area-label="Лайк"></button>
-          </div>
-        </li>
-        <li class="card">
-          <img class="card__image" src="./images/item-4.jpg" alt="Пятиглавый дракон Тиамат">
-          <div class="card__info">
-            <h2 class="card__name">Пятиглавый дракон Тиамат</h2>
-            <button type="button" class="button card__like" area-label="Лайк"></button>
-          </div>
-        </li>
-        <li class="card">
-          <img class="card__image" src="./images/item-5.jpg" alt="Представитель расы голиафов">
-          <div class="card__info">
-            <h2 class="card__name">Голиаф</h2>
-            <button type="button" class="button card__like" area-label="Лайк"></button>
-          </div>
-        </li>
-        <li class="card">
-          <img class="card__image" src="./images/item-6.jpg" alt="Изобретатель из D&D">
-          <div class="card__info">
-            <h2 class="card__name">Изобретатель</h2>
-            <button type="button" class="button card__like" area-label="Лайк"></button>
-          </div>
-        </li>
-      </ul>
-    </section>
-  </main>
-  <footer class="footer">
-    <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
-  </footer>
-  <div class="popup">
-    <div class="popup__container">
-      <button type="button" class="button popup__close-button" area-label="Закрыть редактирование профиля"></button>
-      <h2 class="popup__title">Редактировать профиль</h2>
-      <form class="popup__edit-area" name="editUserInfo">
-        <input class="popup__input popup__input_data_name" required type="text" name="fullname" value="Жак-Ив Кусто"
-          placeholder="Введите ваше имя">
-        <input class="popup__input popup__input_data_description" required type="text" name="description"
-          value="Исследователь океана" placeholder="Введите описание профиля">
-        <button class="button popup__submit-button" type="submit">Сохранить</button>
-      </form>
+<header class="header">
+  <img src="./images/logo.svg" alt="Лого" class="logo">
+</header>
+<main class="content">
+  <section class="profile">
+    <img src="./images/profile-image.jpg" alt="Аватарка пользователя" class="profile__avatar">
+    <div class="profile__info">
+      <h1 class="profile__name">Жак-Ив Кусто</h1>
+      <button type="button" class="button profile__edit-button" area-label="Редактировать профиль"></button>
+      <p class="profile__description">Исследователь океана</p>
     </div>
+    <button type="button" class="button profile__add-button" area-label="Добавить фотографию"></button>
+  </section>
+  <section class="photo-grid">
+    <ul class="cards">
+      <li class="card">
+        <img class="card__image" src="./images/item-1.jpg" alt="Волшебник из D&D">
+        <div class="card__info">
+          <h2 class="card__name">Волшебник</h2>
+          <button type="button" class="button card__like" area-label="Лайк"></button>
+        </div>
+      </li>
+      <li class="card">
+        <img class="card__image" src="./images/item-2.jpg" alt="Иллитид над картой">
+        <div class="card__info">
+          <h2 class="card__name">Иллитид над картой подземелья</h2>
+          <button type="button" class="button card__like card__like_active" area-label="Лайк"></button>
+        </div>
+      </li>
+      <li class="card">
+        <img class="card__image" src="./images/item-3.jpg" alt="Вампир Страд">
+        <div class="card__info">
+          <h2 class="card__name">Страд фон Зарович</h2>
+          <button type="button" class="button card__like card__like_active" area-label="Лайк"></button>
+        </div>
+      </li>
+      <li class="card">
+        <img class="card__image" src="./images/item-4.jpg" alt="Пятиглавый дракон Тиамат">
+        <div class="card__info">
+          <h2 class="card__name">Пятиглавый дракон Тиамат</h2>
+          <button type="button" class="button card__like" area-label="Лайк"></button>
+        </div>
+      </li>
+      <li class="card">
+        <img class="card__image" src="./images/item-5.jpg" alt="Представитель расы голиафов">
+        <div class="card__info">
+          <h2 class="card__name">Голиаф</h2>
+          <button type="button" class="button card__like" area-label="Лайк"></button>
+        </div>
+      </li>
+      <li class="card">
+        <img class="card__image" src="./images/item-6.jpg" alt="Изобретатель из D&D">
+        <div class="card__info">
+          <h2 class="card__name">Изобретатель</h2>
+          <button type="button" class="button card__like" area-label="Лайк"></button>
+        </div>
+      </li>
+    </ul>
+  </section>
+</main>
+<footer class="footer">
+  <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
+</footer>
+<div class="popup">
+  <div class="popup__container">
+    <button type="button" class="button popup__close-button" area-label="Закрыть редактирование профиля"></button>
+    <h2 class="popup__title">Редактировать профиль</h2>
+    <form class="popup__edit-area" name="editUserInfo">
+      <input class="popup__input popup__input_data_name" required type="text" name="fullname" value="Жак-Ив Кусто"
+             placeholder="Введите ваше имя">
+      <input class="popup__input popup__input_data_description" required type="text" name="description"
+             value="Исследователь океана" placeholder="Введите описание профиля">
+      <button class="button popup__submit-button" type="submit">Сохранить</button>
+    </form>
   </div>
+</div>
+<script>
+    const editProfileButton = document.querySelector('.profile__edit-button');
+    editProfileButton.addEventListener('click', () => {
+        document.querySelector('.popup').classList.add('popup_opened');
+    });
+
+    const closePopupButton = document.querySelector('.popup__close-button');
+    closePopupButton.addEventListener('click', () => {
+        document.querySelector('.popup').classList.remove('popup_opened');
+    });
+
+    const likeButtons = document.querySelectorAll('.card__like');
+    likeButtons.forEach(button => button.addEventListener('click', () => {
+        button.classList.toggle('card__like_active');
+    }));
+</script>
 </body>
 
 </html>
