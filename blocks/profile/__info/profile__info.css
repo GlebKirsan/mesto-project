@@ -8,9 +8,10 @@
 
 @media screen and (max-width: 1080px) {
   .profile__info {
-    padding-top: 22.25px;
+    padding-top: 26px;
     justify-content: center;
+    align-items: flex-start;
     padding-left: 0;
-    padding-bottom: 36px;
+    padding-bottom: 33px;
   }
 }
