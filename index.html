@@ -79,9 +79,10 @@
       <button type="button" class="button popup__close-button"></button>
       <h2 class="popup__title">Редактировать профиль</h2>
       <form class="popup__edit-area" name="editUserInfo">
-        <input class="popup__input popup__input_data_name" type="text" name="fullname" value="Жак-Ив Кусто">
-        <input class="popup__input popup__input_data_description" type="text" name="description"
-               value="Исследователь океана">
+        <input class="popup__input popup__input_data_name" required type="text" name="fullname" value="Жак-Ив Кусто"
+          placeholder="Введите ваше имя">
+        <input class="popup__input popup__input_data_description" required type="text" name="description"
+          value="Исследователь океана" placeholder="Введите описание профиля">
         <button class="button popup__submit-button" type="submit">Сохранить</button>
       </form>
     </div>
