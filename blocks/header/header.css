@@ -1,9 +1,8 @@
 .header {
-  line-height: 0;
   width: 100%;
   max-width: 880px;
   border-bottom: 1px solid rgb(84, 84, 84, 0.7);
-  padding: 45px 0;
+  padding: 45px 0 36px;
   margin: 0 auto;
 }
 

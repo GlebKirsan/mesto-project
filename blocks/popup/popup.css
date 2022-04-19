@@ -1,5 +1,6 @@
 .popup {
   display: none;
+  justify-content: center;
   position: fixed;
   left: 0;
   top: 0;
