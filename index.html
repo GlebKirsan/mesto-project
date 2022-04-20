@@ -24,48 +24,6 @@
   </section>
   <section class="photo-grid">
     <ul class="cards">
-      <li class="card">
-        <img class="card__image" src="./images/item-1.jpg" alt="Волшебник из D&D">
-        <div class="card__info">
-          <h2 class="card__name">Волшебник</h2>
-          <button type="button" class="button card__like" aria-label="Лайк"></button>
-        </div>
-      </li>
-      <li class="card">
-        <img class="card__image" src="./images/item-2.jpg" alt="Иллитид над картой">
-        <div class="card__info">
-          <h2 class="card__name">Иллитид над картой подземелья</h2>
-          <button type="button" class="button card__like card__like_active" aria-label="Лайк"></button>
-        </div>
-      </li>
-      <li class="card">
-        <img class="card__image" src="./images/item-3.jpg" alt="Вампир Страд">
-        <div class="card__info">
-          <h2 class="card__name">Страд фон Зарович</h2>
-          <button type="button" class="button card__like card__like_active" aria-label="Лайк"></button>
-        </div>
-      </li>
-      <li class="card">
-        <img class="card__image" src="./images/item-4.jpg" alt="Пятиглавый дракон Тиамат">
-        <div class="card__info">
-          <h2 class="card__name">Пятиглавый дракон Тиамат</h2>
-          <button type="button" class="button card__like" aria-label="Лайк"></button>
-        </div>
-      </li>
-      <li class="card">
-        <img class="card__image" src="./images/item-5.jpg" alt="Представитель расы голиафов">
-        <div class="card__info">
-          <h2 class="card__name">Голиаф</h2>
-          <button type="button" class="button card__like" aria-label="Лайк"></button>
-        </div>
-      </li>
-      <li class="card">
-        <img class="card__image" src="./images/item-6.jpg" alt="Изобретатель из D&D">
-        <div class="card__info">
-          <h2 class="card__name">Изобретатель</h2>
-          <button type="button" class="button card__like" aria-label="Лайк"></button>
-        </div>
-      </li>
     </ul>
   </section>
 </main>
@@ -77,30 +35,26 @@
     <button type="button" class="button popup__close-button" aria-label="Закрыть редактирование профиля"></button>
     <h2 class="popup__title">Редактировать профиль</h2>
     <form class="popup__edit-area" name="editUserInfo">
-      <input class="popup__input popup__input_data_name" required type="text" name="fullname" value="Жак-Ив Кусто"
+      <input class="popup__input popup__input_data_name" required type="text" name="fullname"
              placeholder="Введите ваше имя">
       <input class="popup__input popup__input_data_description" required type="text" name="description"
-             value="Исследователь океана" placeholder="Введите описание профиля">
+             placeholder="Введите описание профиля">
       <button class="button popup__submit-button" type="submit">Сохранить</button>
     </form>
   </div>
 </div>
-<script>
-    const editProfileButton = document.querySelector('.profile__edit-button');
-    editProfileButton.addEventListener('click', () => {
-        document.querySelector('.popup').classList.add('popup_opened');
-    });
 
-    const closePopupButton = document.querySelector('.popup__close-button');
-    closePopupButton.addEventListener('click', () => {
-        document.querySelector('.popup').classList.remove('popup_opened');
-    });
+<template id="card-template">
+  <li class="card">
+    <button type="button" class="button card__delete" aria-label="Удалить карточку"></button>
+    <img class="card__image" src="" alt="">
+    <div class="card__info">
+      <h2 class="card__name"></h2>
+      <button type="button" class="button card__like" aria-label="Лайк"></button>
+    </div>
+</template>
 
-    const likeButtons = document.querySelectorAll('.card__like');
-    likeButtons.forEach(button => button.addEventListener('click', () => {
-        button.classList.toggle('card__like_active');
-    }));
-</script>
+<script src="script.js"></script>
 </body>
 
 </html>
