@@ -104,6 +104,8 @@ popupAddCard.querySelector('.popup__edit-area').addEventListener('submit', event
     addCard(newCardName, newCardLink);
 
     closePopup(event.target.closest('.popup'));
+    addCardEditArea.querySelector('.popup__input_data_name').value = '';
+    addCardEditArea.querySelector('.popup__input_data_link').value = '';
 });
 
 preExistingCards.forEach(card => addCard(card.name, card.link));
