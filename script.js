@@ -32,9 +32,9 @@ const editProfileButton = document.querySelector('.profile__edit-button');
 const popupEditProfile = document.querySelector('.popup_edit-profile');
 const newProfileNameElement = popupEditProfile.querySelector('.popup__input_data_name');
 const newProfileDescriptionElement = popupEditProfile.querySelector('.popup__input_data_description');
-const profile = document.querySelector('.profile__info');
-const profileName = profile.querySelector('.profile__name');
-const profileDescription = profile.querySelector('.profile__description');
+const profileInfo = document.querySelector('.profile__info');
+const profileName = profileInfo.querySelector('.profile__name');
+const profileDescription = profileInfo.querySelector('.profile__description');
 
 const addCardButton = document.querySelector('.profile__add-button');
 const popupAddCard = document.querySelector('.popup_add-card');
