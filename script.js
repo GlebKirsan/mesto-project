@@ -29,6 +29,13 @@ const popupEditProfile = document.querySelector('.popup_edit-profile');
 const popupAddCard = document.querySelector('.popup_add-card');
 const popupImageView = document.querySelector('.popup_image-view');
 
+const openPopup = popup => {
+    popup.classList.add('popup_opened');
+};
+const closePopup = popup => {
+    popup.classList.remove('popup_opened')
+}
+
 const addCard = (name, link) => {
     const cardsContainer = document.querySelector('.cards');
     const cardTemplate = document.querySelector('#card-template').content;
@@ -46,10 +53,10 @@ const addCard = (name, link) => {
         event.target.closest('.card').remove();
     });
     cardImage.addEventListener('click', event => {
-        popupImageView.classList.add('popup_opened')
         popupImageView.querySelector('.popup__image').src = link;
         popupImageView.querySelector('.popup__image').alt = name;
         popupImageView.querySelector('.popup__image-caption').textContent = name;
+        openPopup(popupImageView);
     });
 
     cardsContainer.append(card);
@@ -57,46 +64,46 @@ const addCard = (name, link) => {
 
 const editProfileButton = document.querySelector('.profile__edit-button');
 editProfileButton.addEventListener('click', () => {
-    const profileName = document.querySelector('.profile__name');
-    const profileDescription = document.querySelector('.profile__description');
+    const profile = document.querySelector('.profile__info');
+    const profileName = profile.querySelector('.profile__name');
+    const profileDescription = profile.querySelector('.profile__description');
 
     popupEditProfile.querySelector('.popup__input_data_name').value = profileName.textContent;
     popupEditProfile.querySelector('.popup__input_data_description').value = profileDescription.textContent;
 
-    popupEditProfile.classList.add('popup_opened');
+    openPopup(popupEditProfile);
 });
 
 const addCardButton = document.querySelector('.profile__add-button');
-addCardButton.addEventListener('click', () => popupAddCard.classList.add('popup_opened'));
+addCardButton.addEventListener('click', () => openPopup(popupAddCard));
 
 const closePopupButtons = document.querySelectorAll('.popup__close-button');
 closePopupButtons.forEach(button => button.addEventListener('click', event => {
-    event.target.closest('.popup').classList.remove('popup_opened');
+    closePopup(event.target.closest('.popup'));
 }));
 
 popupEditProfile.querySelector('.popup__edit-area').addEventListener('submit', event => {
     event.preventDefault();
 
     const profileEditArea = event.target;
-    let newProfileName = profileEditArea.querySelector('.popup__input_data_name').value;
-    let newProfileDescription = profileEditArea.querySelector('.popup__input_data_description').value;
+    const newProfileName = profileEditArea.querySelector('.popup__input_data_name').value;
+    const newProfileDescription = profileEditArea.querySelector('.popup__input_data_description').value;
 
     const profileInfo = document.querySelector('.profile__info');
     profileInfo.querySelector('.profile__name').textContent = newProfileName;
     profileInfo.querySelector('.profile__description').textContent = newProfileDescription;
 
-    event.target.closest('.popup').classList.remove('popup_opened');
+    closePopup(event.target.closest('.popup'));
 });
 popupAddCard.querySelector('.popup__edit-area').addEventListener('submit', event => {
     event.preventDefault();
 
     const addCardEditArea = event.target;
-    let newCardName = addCardEditArea.querySelector('.popup__input_data_name').value;
-    let newCardLink = addCardEditArea.querySelector('.popup__input_data_link').value;
-
+    const newCardName = addCardEditArea.querySelector('.popup__input_data_name').value;
+    const newCardLink = addCardEditArea.querySelector('.popup__input_data_link').value;
     addCard(newCardName, newCardLink);
 
-    event.target.closest('.popup').classList.remove('popup_opened');
+    closePopup(event.target.closest('.popup'));
 });
 
 preExistingCards.forEach(card => addCard(card.name, card.link));
