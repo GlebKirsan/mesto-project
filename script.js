@@ -52,7 +52,7 @@ const addCard = (name, link) => {
     card.querySelector('.card__delete').addEventListener('click', event => {
         event.target.closest('.card').remove();
     });
-    cardImage.addEventListener('click', event => {
+    cardImage.addEventListener('click', () => {
         popupImageView.querySelector('.popup__image').src = link;
         popupImageView.querySelector('.popup__image').alt = name;
         popupImageView.querySelector('.popup__image-caption').textContent = name;
