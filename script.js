@@ -27,6 +27,7 @@ const preExistingCards = [
 
 const cardsContainer = document.querySelector('.cards');
 const cardTemplate = document.querySelector('#card-template').content;
+const cardForClone = cardTemplate.querySelector('.card');
 
 const editProfileButton = document.querySelector('.profile__edit-button');
 const popupEditProfile = document.querySelector('.popup_edit-profile');
@@ -51,7 +52,7 @@ const closePopup = popup => {
 }
 
 const createCard = (name, link) => {
-    const card = cardTemplate.querySelector('.card').cloneNode(true);
+    const card = cardForClone.cloneNode(true);
     const cardImage = card.querySelector('.card__image');
 
     card.querySelector('.card__name').textContent = name;
