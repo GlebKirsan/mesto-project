@@ -59,7 +59,7 @@ const addCard = (name, link) => {
         openPopup(popupImageView);
     });
 
-    cardsContainer.append(card);
+    cardsContainer.prepend(card);
 };
 
 const editProfileButton = document.querySelector('.profile__edit-button');
