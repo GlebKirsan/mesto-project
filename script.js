@@ -24,6 +24,7 @@ const preExistingCards = [
         link: "./images/item-6.jpg"
     }
 ];
+const popup = document.querySelector('.popup');
 
 const addCard = (name, link) => {
     const cardsContainer = document.querySelector('.cards');
@@ -47,7 +48,6 @@ const addCard = (name, link) => {
 
 const editProfileButton = document.querySelector('.profile__edit-button');
 editProfileButton.addEventListener('click', () => {
-    const popup = document.querySelector('.popup');
     const profileName = document.querySelector('.profile__name');
     const profileDescription = document.querySelector('.profile__description');
 
@@ -59,7 +59,7 @@ editProfileButton.addEventListener('click', () => {
 
 const closePopupButton = document.querySelector('.popup__close-button');
 closePopupButton.addEventListener('click', () => {
-    document.querySelector('.popup').classList.remove('popup_opened');
+    popup.classList.remove('popup_opened');
 });
 
 const editArea = document.querySelector('.popup__edit-area');
@@ -72,6 +72,8 @@ editArea.addEventListener('submit', event => {
     const profileInfo = document.querySelector('.profile__info');
     profileInfo.querySelector('.profile__name').textContent = newProfileName;
     profileInfo.querySelector('.profile__description').textContent = newProfileDescription;
+
+    popup.classList.remove('popup_opened');
 })
 
 preExistingCards.forEach(card => addCard(card.name, card.link));
