@@ -25,6 +25,11 @@
 @import url('../blocks/footer/__copyright/footer__copyright.css');
 @import url('../blocks/popup/popup.css');
 @import url('../blocks/popup/_opened/popup_opened.css');
+@import url('../blocks/popup/_image-view/popup_image-view.css');
+@import url('../blocks/popup/__figure-container/popup__figure-container.css');
+@import url('../blocks/popup/__figure/popup__figure.css');
+@import url('../blocks/popup/__image/popup__image.css');
+@import url('../blocks/popup/__image-caption/popup__image-caption.css');
 @import url('../blocks/popup/__container/popup__container.css');
 @import url('../blocks/popup/__close-button/popup__close-button.css');
 @import url('../blocks/popup/__title/popup__title.css');

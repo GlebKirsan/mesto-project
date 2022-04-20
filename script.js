@@ -27,6 +27,7 @@ const preExistingCards = [
 
 const popupEditProfile = document.querySelector('.popup_edit-profile');
 const popupAddCard = document.querySelector('.popup_add-card');
+const popupImageView = document.querySelector('.popup_image-view');
 
 const addCard = (name, link) => {
     const cardsContainer = document.querySelector('.cards');
@@ -43,6 +44,12 @@ const addCard = (name, link) => {
     });
     card.querySelector('.card__delete').addEventListener('click', event => {
         event.target.closest('.card').remove();
+    });
+    cardImage.addEventListener('click', event => {
+        popupImageView.classList.add('popup_opened')
+        popupImageView.querySelector('.popup__image').src = link;
+        popupImageView.querySelector('.popup__image').alt = name;
+        popupImageView.querySelector('.popup__image-caption').textContent = name;
     });
 
     cardsContainer.append(card);
