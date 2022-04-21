@@ -58,25 +58,25 @@ const createCard = (name, link) => {
     card.querySelector('.card__name').textContent = name;
     cardImage.src = link;
     cardImage.alt = name;
-    return card;
-}
 
-const renderCard = (name, link) => {
-    const newCard = createCard(name, link);
-
-    newCard.querySelector('.card__like').addEventListener('click', event => {
+    card.querySelector('.card__like').addEventListener('click', event => {
         event.target.classList.toggle('card__like_active');
     });
-    newCard.querySelector('.card__delete').addEventListener('click', event => {
+    card.querySelector('.card__delete').addEventListener('click', event => {
         event.target.closest('.card').remove();
     });
-    newCard.querySelector('.card__image').addEventListener('click', () => {
+    cardImage.addEventListener('click', () => {
         popupImageView.querySelector('.popup__image').src = link;
         popupImageView.querySelector('.popup__image').alt = name;
         popupImageView.querySelector('.popup__image-caption').textContent = name;
         openPopup(popupImageView);
     });
 
+    return card;
+}
+
+const renderCard = (name, link) => {
+    const newCard = createCard(name, link);
     cardsContainer.prepend(newCard);
 };
 
