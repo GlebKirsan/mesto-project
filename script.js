@@ -75,9 +75,8 @@ const createCard = (name, link) => {
     return card;
 }
 
-const renderCard = (name, link) => {
-    const newCard = createCard(name, link);
-    cardsContainer.prepend(newCard);
+const renderCard = card => {
+    cardsContainer.prepend(card);
 };
 
 editProfileButton.addEventListener('click', () => {
@@ -104,9 +103,8 @@ popupEditProfile.querySelector('.popup__edit-area').addEventListener('submit', e
 });
 popupAddCard.querySelector('.popup__edit-area').addEventListener('submit', event => {
     event.preventDefault();
-    const newCardName = newCardNameElement.value;
-    const newCardLink = newCardLinkElement.value;
-    renderCard(newCardName, newCardLink);
+    const newCard = createCard(newCardNameElement.value, newCardLinkElement.value);
+    renderCard(newCard);
 
     closePopup(event.target.closest('.popup'));
     newCardNameElement.value = '';
