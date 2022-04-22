@@ -111,4 +111,4 @@ popupAddCard.querySelector('.popup__edit-area').addEventListener('submit', event
     newCardLinkElement.value = '';
 });
 
-preExistingCards.forEach(card => renderCard(card.name, card.link));
+preExistingCards.forEach(card => renderCard(createCard(card.name, card.link)));
