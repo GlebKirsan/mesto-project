@@ -124,4 +124,18 @@ popupAddCard.querySelector('.popup__edit-area').addEventListener('submit', event
     newCardLinkElement.value = '';
 });
 
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+        closePopup(document.querySelector('.popup_opened'));
+    }
+});
+
+document.querySelectorAll('.popup').forEach(popup => popup.addEventListener('click', event => {
+    const isClickOnImage = event.target.classList.contains('popup__figure-container');
+    const isClickOnPopup = event.target.classList.contains('popup__container');
+    if (!isClickOnPopup && !isClickOnImage) {
+        closePopup(event.target);
+    }
+}));
+
 preExistingCards.forEach(card => renderCard(createCard(card.name, card.link)));
