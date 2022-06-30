@@ -59,21 +59,34 @@ const createCard = (name, link) => {
     cardImage.src = link;
     cardImage.alt = name;
 
-    card.querySelector('.card__like').addEventListener('click', event => {
-        event.target.classList.toggle('card__like_active');
-    });
-    card.querySelector('.card__delete').addEventListener('click', event => {
-        event.target.closest('.card').remove();
-    });
-    cardImage.addEventListener('click', () => {
-        popupImageView.querySelector('.popup__image').src = link;
-        popupImageView.querySelector('.popup__image').alt = name;
-        popupImageView.querySelector('.popup__image-caption').textContent = name;
-        openPopup(popupImageView);
-    });
-
     return card;
+};
+
+function likeCard(event) {
+    if (event.target.classList.contains('card__like')) {
+        event.target.classList.toggle('card__like_active');
+    }
 }
+
+function deleteCard(event) {
+    if (event.target.classList.contains('card__delete')) {
+        event.target.closest('.card').remove();
+    }
+}
+
+function openCard(event) {
+    if (event.target.classList.contains('card__image')) {
+        const cardName = event.target.alt;
+        popupImageView.querySelector('.popup__image').src = event.target.src;
+        popupImageView.querySelector('.popup__image').alt = cardName;
+        popupImageView.querySelector('.popup__image-caption').textContent = cardName;
+        openPopup(popupImageView);
+    }
+}
+
+cardsContainer.addEventListener('click', likeCard);
+cardsContainer.addEventListener('click', deleteCard);
+cardsContainer.addEventListener('click', openCard);
 
 const renderCard = card => {
     cardsContainer.prepend(card);
