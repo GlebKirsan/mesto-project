@@ -10,8 +10,7 @@
 }
 
 .popup__input:focus {
-  outline: auto;
-  outline-color: rgb(42, 44, 47, 0.5);
+  outline: rgb(42, 44, 47, 0.5);
 }
 
 .popup__input:first-child {

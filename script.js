@@ -126,3 +126,61 @@ document.querySelectorAll('.popup').forEach(popup => popup.addEventListener('cli
 }));
 
 preExistingCards.forEach(card => renderCard(createCard(card.name, card.link)));
+
+const hideInputError = (formElement, formInput) => {
+    const errorElement = formElement.querySelector(`.${formInput.id}-error`);
+    formElement.classList.remove('popup__input_type_error');
+    errorElement.classList.remove('popup__input-error_active');
+    errorElement.textContent = '';
+};
+
+const showInputError = (formElement, formInput, errorMessage) => {
+    const errorElement = formElement.querySelector(`.${formInput.id}-error`);
+    formElement.classList.add('popup__input_type_error');
+    errorElement.textContent = errorMessage;
+    errorElement.classList.add('popup__input-error_active');
+};
+
+const isValid = (formElement, formInput) => {
+    if (formInput.validity.valid) {
+        hideInputError(formElement, formInput);
+    } else {
+        showInputError(formElement, formInput, formInput.validationMessage);
+    }
+};
+
+const hasInvalidInput = inputList => {
+    return inputList.some(input => !input.validity.valid);
+}
+
+const toggleButtonState = (inputList, buttonElement) => {
+    if (hasInvalidInput(inputList)) {
+        buttonElement.classList.add('popup__submit-button_inactive');
+        buttonElement.setAttribute('disabled', false);
+    } else {
+        buttonElement.classList.remove('popup__submit-button_inactive');
+        buttonElement.setAttribute('disabled', true);
+    }
+}
+
+const setEventListeners = popupForm => {
+    const formInputs = Array.from(popupForm.querySelectorAll('.popup__input'));
+    const submitButton = popupForm.querySelector('.popup__submit-button');
+    toggleButtonState(formInputs, submitButton);
+
+    formInputs.forEach(formInput => formInput.addEventListener('input', () => {
+        isValid(popupForm, formInput);
+        toggleButtonState(formInputs, submitButton);
+    }));
+};
+
+const enableValidation = () => {
+    const popupForms = Array.from(document.querySelectorAll('.popup__edit-area'));
+
+    popupForms.forEach(popupForm => {
+        popupForm.addEventListener('submit', event => event.preventDefault());
+        setEventListeners(popupForm);
+    })
+};
+
+enableValidation();

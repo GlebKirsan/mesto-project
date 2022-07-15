@@ -1,5 +1,6 @@
 .popup__edit-area {
   padding-top: 49px;
+  line-height: 0;
 }
 
 @media screen and (max-width: 1080px) {
