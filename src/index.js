@@ -138,14 +138,14 @@ preExistingCards.forEach(card => renderCard(createCard(card.name, card.link)));
 
 const hideInputError = (formElement, formInput) => {
     const errorElement = formElement.querySelector(`.${formInput.id}-error`);
-    formElement.classList.remove('popup__input_type_error');
+    formInput.classList.remove('popup__input_type_error');
     errorElement.classList.remove('popup__input-error_active');
     errorElement.textContent = '';
 };
 
 const showInputError = (formElement, formInput, errorMessage) => {
     const errorElement = formElement.querySelector(`.${formInput.id}-error`);
-    formElement.classList.add('popup__input_type_error');
+    formInput.classList.add('popup__input_type_error');
     errorElement.textContent = errorMessage;
     errorElement.classList.add('popup__input-error_active');
 };
