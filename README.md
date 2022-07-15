@@ -13,6 +13,7 @@
 При разработке использовались:
 - HTML;
 - CSS;
+- WebPack;
 - JS.
 
 [Репозиторий](https://github.com/GlebKirsan/mesto-project)

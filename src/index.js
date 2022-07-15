@@ -1,27 +1,36 @@
+import './pages/index.css';
+
+import wizardImage from './images/item-1.jpg';
+import illitidImage from './images/item-2.jpg';
+import strahdImage from './images/item-3.jpg';
+import tiamatImage from './images/item-4.jpg';
+import goliathImage from './images/item-5.jpg';
+import artificierImage from './images/item-6.jpg';
+
 const preExistingCards = [
     {
         name: "Волшебник",
-        link: "./images/item-1.jpg"
+        link: wizardImage
     },
     {
         name: "Иллитид над картой подземелья",
-        link: "./images/item-2.jpg"
+        link: illitidImage
     },
     {
         name: "Страд фон Зарович",
-        link: "./images/item-3.jpg"
+        link: strahdImage
     },
     {
         name: "Пятиглавый дракон Тиамат",
-        link: "./images/item-4.jpg"
+        link: tiamatImage
     },
     {
         name: "Голиаф",
-        link: "./images/item-5.jpg"
+        link: goliathImage
     },
     {
         name: "Изобретатель",
-        link: "./images/item-6.jpg"
+        link: artificierImage
     }
 ];
 
