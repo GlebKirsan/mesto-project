@@ -62,4 +62,4 @@ const enableValidation = validationSelectors => {
     })
 };
 
-export default enableValidation;
+export {enableValidation, disableButton};

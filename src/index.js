@@ -1,13 +1,7 @@
 import './pages/index.css';
 
-import enableValidation from "./components/validation";
-import {closePopup} from "./components/modal";
-
-document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') {
-        closePopup(document.querySelector('.popup_opened'));
-    }
-});
+import {enableValidation} from "./components/validation";
+import * as modal from "./components/modal.js"
 
 enableValidation({
     formSelector: '.popup__edit-area',

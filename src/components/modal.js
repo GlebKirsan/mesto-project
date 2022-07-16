@@ -1,4 +1,5 @@
 import {createCard, renderCard} from "./card";
+import {disableButton} from "./validation";
 
 const popupEditProfile = document.querySelector('.popup_edit-profile');
 const newProfileNameElement = popupEditProfile.querySelector('.popup__input_data_name');
@@ -11,6 +12,7 @@ const profileDescription = profileInfo.querySelector('.profile__description');
 const popupAddCard = document.querySelector('.popup_add-card');
 const newCardNameElement = popupAddCard.querySelector('.popup__input_data_name');
 const newCardLinkElement = popupAddCard.querySelector('.popup__input_data_link');
+const addCardSubmitButton = popupAddCard.querySelector('.popup__submit-button');
 
 const closeByClickOutside = event => {
     const isClickOnImage = event.target.classList.contains('popup__figure-container');
@@ -20,14 +22,23 @@ const closeByClickOutside = event => {
     }
 };
 
+const closeByEscape = event => {
+    if (event.key === 'Escape') {
+        const openedPopup = document.querySelector('.popup_opened');
+        closePopup(openedPopup);
+    }
+}
+
 const openPopup = popup => {
     popup.classList.add('popup_opened');
     popup.addEventListener('click', closeByClickOutside);
+    document.addEventListener('keydown', closeByEscape);
 };
 
 const closePopup = popup => {
     popup.classList.remove('popup_opened')
     popup.removeEventListener('click', closeByClickOutside);
+    document.removeEventListener('keydown', closeByEscape);
 };
 
 const editProfileButton = document.querySelector('.profile__edit-button');
@@ -61,8 +72,8 @@ popupAddCard.querySelector('.popup__edit-area').addEventListener('submit', event
     renderCard(newCard);
 
     closePopup(event.target.closest('.popup'));
-    newCardNameElement.value = '';
-    newCardLinkElement.value = '';
+    event.target.reset();
+    disableButton(addCardSubmitButton, '.popup__submit-button_inactive');
 });
 
 export {openPopup, closePopup};
