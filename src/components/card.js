@@ -13,8 +13,8 @@ const popupImage = popupImageView.querySelector('.popup__image');
 const popupImageCaption = popupImageView.querySelector('.popup__image-caption');
 
 const cardTemplate = document.querySelector('#card-template').content;
-
 const cardForClone = cardTemplate.querySelector('.card');
+
 const createCard = (name, link) => {
     const card = cardForClone.cloneNode(true);
 
