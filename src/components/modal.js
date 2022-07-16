@@ -73,7 +73,7 @@ popupAddCard.querySelector('.popup__edit-area').addEventListener('submit', event
 
     closePopup(event.target.closest('.popup'));
     event.target.reset();
-    disableButton(addCardSubmitButton, '.popup__submit-button_inactive');
+    disableButton(addCardSubmitButton, 'popup__submit-button_inactive');
 });
 
 export {openPopup, closePopup};
