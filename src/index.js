@@ -9,14 +9,6 @@ document.addEventListener('keydown', event => {
     }
 });
 
-document.querySelectorAll('.popup').forEach(popup => popup.addEventListener('click', event => {
-    const isClickOnImage = event.target.classList.contains('popup__figure-container');
-    const isClickOnPopup = event.target.classList.contains('popup__container');
-    if (!isClickOnPopup && !isClickOnImage) {
-        closePopup(event.target);
-    }
-}));
-
 enableValidation({
     formSelector: '.popup__edit-area',
     inputSelector: '.popup__input',

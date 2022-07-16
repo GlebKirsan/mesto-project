@@ -12,12 +12,22 @@ const popupAddCard = document.querySelector('.popup_add-card');
 const newCardNameElement = popupAddCard.querySelector('.popup__input_data_name');
 const newCardLinkElement = popupAddCard.querySelector('.popup__input_data_link');
 
+const closeByClickOutside = event => {
+    const isClickOnImage = event.target.classList.contains('popup__figure-container');
+    const isClickOnPopup = event.target.classList.contains('popup__container');
+    if (!isClickOnPopup && !isClickOnImage) {
+        closePopup(event.target);
+    }
+};
+
 const openPopup = popup => {
     popup.classList.add('popup_opened');
+    popup.addEventListener('click', closeByClickOutside);
 };
 
 const closePopup = popup => {
     popup.classList.remove('popup_opened')
+    popup.removeEventListener(closeByClickOutside);
 };
 
 const editProfileButton = document.querySelector('.profile__edit-button');
