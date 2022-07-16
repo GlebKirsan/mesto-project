@@ -9,9 +9,12 @@ import artificierImage from '../images/item-6.jpg';
 
 const cardsContainer = document.querySelector('.cards');
 const popupImageView = document.querySelector('.popup_image-view');
-const cardTemplate = document.querySelector('#card-template').content;
-const cardForClone = cardTemplate.querySelector('.card');
+const popupImage = popupImageView.querySelector('.popup__image');
+const popupImageCaption = popupImageView.querySelector('.popup__image-caption');
 
+const cardTemplate = document.querySelector('#card-template').content;
+
+const cardForClone = cardTemplate.querySelector('.card');
 const createCard = (name, link) => {
     const card = cardForClone.cloneNode(true);
 
@@ -28,9 +31,9 @@ const createCard = (name, link) => {
     });
 
     cardImage.addEventListener('click', () => {
-        popupImageView.querySelector('.popup__image').src = link;
-        popupImageView.querySelector('.popup__image').alt = name;
-        popupImageView.querySelector('.popup__image-caption').textContent = name;
+        popupImage.src = link;
+        popupImage.alt = name;
+        popupImageCaption.textContent = name;
         openPopup(popupImageView);
     });
     return card;
