@@ -27,7 +27,7 @@ const openPopup = popup => {
 
 const closePopup = popup => {
     popup.classList.remove('popup_opened')
-    popup.removeEventListener(closeByClickOutside);
+    popup.removeEventListener('click', closeByClickOutside);
 };
 
 const editProfileButton = document.querySelector('.profile__edit-button');
