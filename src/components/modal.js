@@ -7,6 +7,7 @@ const newProfileDescriptionElement = popupEditProfile.querySelector('.popup__inp
 
 const profileInfo = document.querySelector('.profile__info');
 const profileName = profileInfo.querySelector('.profile__name');
+const profileAvatar = document.querySelector('.profile__avatar');
 const profileDescription = profileInfo.querySelector('.profile__description');
 
 const popupAddCard = document.querySelector('.popup_add-card');
@@ -40,6 +41,12 @@ const closePopup = popup => {
     popup.removeEventListener('click', closeByClickOutside);
     document.removeEventListener('keydown', closeByEscape);
 };
+
+const updateProfileInfo = (avatarLink, name, about) => {
+    profileName.textContent = name;
+    profileDescription.textContent = about;
+    profileAvatar.src = avatarLink;
+}
 
 const editProfileButton = document.querySelector('.profile__edit-button');
 editProfileButton.addEventListener('click', () => {
@@ -76,4 +83,4 @@ popupAddCard.querySelector('.popup__edit-area').addEventListener('submit', event
     disableButton(addCardSubmitButton, 'popup__submit-button_inactive');
 });
 
-export {openPopup, closePopup};
+export {openPopup, closePopup, updateProfileInfo};

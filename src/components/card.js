@@ -1,12 +1,5 @@
 import {openPopup} from "./modal";
 
-import wizardImage from '../images/item-1.jpg';
-import illitidImage from '../images/item-2.jpg';
-import strahdImage from '../images/item-3.jpg';
-import tiamatImage from '../images/item-4.jpg';
-import goliathImage from '../images/item-5.jpg';
-import artificierImage from '../images/item-6.jpg';
-
 const cardsContainer = document.querySelector('.cards');
 const popupImageView = document.querySelector('.popup_image-view');
 const popupImage = popupImageView.querySelector('.popup__image');
@@ -37,38 +30,10 @@ const createCard = (name, link) => {
         openPopup(popupImageView);
     });
     return card;
-
 }
+
 const renderCard = card => {
     cardsContainer.prepend(card);
 };
 
-const preExistingCards = [
-    {
-        name: "Волшебник",
-        link: wizardImage
-    },
-    {
-        name: "Иллитид над картой подземелья",
-        link: illitidImage
-    },
-    {
-        name: "Страд фон Зарович",
-        link: strahdImage
-    },
-    {
-        name: "Пятиглавый дракон Тиамат",
-        link: tiamatImage
-    },
-    {
-        name: "Голиаф",
-        link: goliathImage
-    },
-    {
-        name: "Изобретатель",
-        link: artificierImage
-    }
-];
-preExistingCards.forEach(card => renderCard(createCard(card.name, card.link)));
-
-export {renderCard, createCard};
+export {createCard, renderCard};
