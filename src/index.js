@@ -4,26 +4,31 @@ import {enableValidation} from "./components/validation";
 import {updateProfileInfo} from "./components/modal";
 
 import {getCards, getClientInfo} from "./components/api";
-import {checkImageAvailable} from "./components/utils";
-import {createCard, renderCard} from "./components/card";
+import {checkImageAvailable, parseDateInCard, sortCardsByDate} from "./components/utils";
+import {createCard, pressLikeIfClientLiked, renderCard, setLikeCounter} from "./components/card";
 
 let _id;
-
-getCards()
-    .then(cards => {
-        cards.sort((lhs, rhs) => rhs.createdAt - lhs.createdAt);
-        cards.forEach(card => {
-            checkImageAvailable(card.link)
-                .then(() => createCard(card.name, card.link))
-                .then(renderCard)
-                .catch(() => console.error(`Изображение ${card.name} по ссылке ${card.link} не доступно.`));
-        });
-    });
 
 getClientInfo()
     .then(clientInfo => {
         _id = clientInfo._id;
         updateProfileInfo(clientInfo.avatar, clientInfo.name, clientInfo.about);
+    });
+
+getCards()
+    .then(cards => {
+        cards = cards.map(parseDateInCard).sort(sortCardsByDate);
+        cards.forEach(card => {
+            checkImageAvailable(card.link)
+                .then(() => createCard(card.name, card.link))
+                .then(cardElement => setLikeCounter(cardElement, card.likes.length))
+                .then(cardElement => {
+                    const clientLiked = card.likes.map(user => user._id).includes(_id);
+                    return pressLikeIfClientLiked(cardElement, clientLiked)
+                })
+                .then(renderCard)
+                .catch(() => console.error(`Изображение ${card.name} по ссылке ${card.link} не доступно.`));
+        });
     });
 
 enableValidation({

@@ -7,5 +7,13 @@ function checkImageAvailable(imageUrl) {
     });
 }
 
+function parseDateInCard(card) {
+    card.createdAt = new Date(card.createdAt);
+    return card;
+}
 
-export {checkImageAvailable};
+function sortCardsByDate(lhsCard, rhsCard) {
+    return lhsCard.createdAt - rhsCard.createdAt
+}
+
+export {checkImageAvailable, parseDateInCard, sortCardsByDate};

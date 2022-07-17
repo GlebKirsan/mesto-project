@@ -8,6 +8,18 @@ const popupImageCaption = popupImageView.querySelector('.popup__image-caption');
 const cardTemplate = document.querySelector('#card-template').content;
 const cardForClone = cardTemplate.querySelector('.card');
 
+function setLikeCounter(card, likes) {
+    card.querySelector('.card__likes-counter').textContent = likes;
+    return card;
+}
+
+function pressLikeIfClientLiked(card, clientLiked) {
+    if (clientLiked) {
+        card.querySelector('.card__like').classList.add('card__like_active');
+    }
+    return card;
+}
+
 const createCard = (name, link) => {
     const card = cardForClone.cloneNode(true);
 
@@ -36,4 +48,4 @@ const renderCard = card => {
     cardsContainer.prepend(card);
 };
 
-export {createCard, renderCard};
+export {createCard, renderCard, setLikeCounter, pressLikeIfClientLiked};

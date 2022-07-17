@@ -1,52 +1,47 @@
 const groupIdentifier = 'plus-cohort-12';
 const token = '5374e37d-a100-45c2-9054-8042aa4bada1';
+const headers = {
+    authorization: token, 'Content-Type': 'application/json'
+};
 const backendUrlPrefix = `https://mesto.nomoreparties.co/v1/${groupIdentifier}`;
 const clientUrl = `${backendUrlPrefix}/users/me`;
 const cardsUrl = `${backendUrlPrefix}/cards`;
 
+function getJsonOrReject(result, errorMessage) {
+    if (result.ok) {
+        return result.json();
+    }
+    return Promise.reject(errorMessage + " " + result.status);
+}
+
 function getClientInfo() {
     return fetch(clientUrl, {
-        headers: {
-            authorization: token
-        }
-    }).then(result => {
-        if (result.ok) {
-            return result.json();
-        }
-        return Promise.reject(`Ошибка получения информации о пользователе ${result.status}`);
-    });
+        headers
+    }).then(result => getJsonOrReject(result, 'Ошибка получения информации о пользователе'));
 }
 
 function updateClientInfo(name, about) {
     return fetch(clientUrl, {
-        method: 'PATCH',
-        headers: {
-            authorization: token,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name: name,
-            about: about
+        method: 'PATCH', headers, body: JSON.stringify({
+            name: name, about: about
         })
-    }).then(result => {
-        if (result.ok) {
-            return result.json();
-        }
-        return Promise.reject(`Ошибка обновлении информации о пользователе ${result.status}`);
-    });
+    }).then(result => getJsonOrReject(result, 'Ошибка обновлении информации о пользователе'));
 }
 
 function getCards() {
-    return fetch(cardsUrl, {
-        headers: {
-            authorization: token
-        }
-    }).then(result => {
-        if (result.ok) {
-            return result.json();
-        }
-        return Promise.reject(`Ошибка получения карточек ${result.status}`);
-    });
+    return fetch(cardsUrl, {headers})
+        .then(result => getJsonOrReject(result, 'Ошибка получения карточек'));
 }
 
-export {getCards, getClientInfo, updateClientInfo};
+function createCard(name, link) {
+    return fetch(cardsUrl, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+            name: name,
+            link: link
+        })
+    }).then(result => getJsonOrReject(result, 'Ошибка создания новой карточки'));
+}
+
+export {getCards, getClientInfo, updateClientInfo, createCard};

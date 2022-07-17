@@ -1,6 +1,6 @@
 import {createCard, renderCard} from "./card";
 import {disableButton} from "./validation";
-import {updateClientInfo} from "./api";
+import {updateClientInfo, createCard as createCardRequest} from "./api";
 
 const popupEditProfile = document.querySelector('.popup_edit-profile');
 const newProfileNameElement = popupEditProfile.querySelector('.popup__input_data_name');
@@ -78,12 +78,14 @@ popupEditProfile.querySelector('.popup__edit-area').addEventListener('submit', e
 
 popupAddCard.querySelector('.popup__edit-area').addEventListener('submit', event => {
     event.preventDefault();
-    const newCard = createCard(newCardNameElement.value, newCardLinkElement.value);
-    renderCard(newCard);
-
-    closePopup(event.target.closest('.popup'));
-    event.target.reset();
-    disableButton(addCardSubmitButton, 'popup__submit-button_inactive');
+    createCardRequest(newCardNameElement.value, newCardLinkElement.value)
+        .then(card => createCard(card.name, card.value))
+        .then(renderCard)
+        .then(() => {
+            closePopup(event.target.closest('.popup'));
+            event.target.reset();
+            disableButton(addCardSubmitButton, 'popup__submit-button_inactive');
+        })
 });
 
 export {openPopup, closePopup, updateProfileInfo};
