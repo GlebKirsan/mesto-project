@@ -1,13 +1,4 @@
-const groupIdentifier = 'plus-cohort-12';
-const token = '5374e37d-a100-45c2-9054-8042aa4bada1';
-const headers = {
-    authorization: token, 'Content-Type': 'application/json'
-};
-const backendUrlPrefix = `https://mesto.nomoreparties.co/v1/${groupIdentifier}`;
-const clientUrl = `${backendUrlPrefix}/users/me`;
-const avatarEditUrl = `${clientUrl}/avatar`;
-const cardsUrl = `${backendUrlPrefix}/cards`;
-const cardLike = `${cardsUrl}/likes`;
+import {avatarEditUrl, cardLike, cardsUrl, clientUrl, headers} from "./elements";
 
 function getJsonOrReject(result, errorMessage) {
     if (200 <= result.status && result.status < 300) {

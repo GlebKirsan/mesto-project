@@ -1,38 +1,139 @@
 import './pages/index.css';
 
-import {enableValidation} from "./components/validation";
-import {updateProfileInfo} from "./components/modal";
+import {disableButton, enableValidation} from "./components/validation";
 
-import {getCards, getClientInfo} from "./components/api";
-import {checkImageAvailable, parseDateInCard, sortCardsByDateDescending} from "./components/utils";
+import {
+    createCard as createCardRequest,
+    deleteCard,
+    getCards,
+    getClientInfo,
+    likeCard,
+    unlikeCard,
+    updateClientInfo,
+    editAvatar as editAvatarRequest
+} from "./components/api";
+import {checkImageAvailable, parseDateInCard, renderLoading, sortCardsByDateDescending} from "./components/utils";
 import {
     assignId,
     createCard,
     disableDeleteIfNotOwner,
-    pressLikeIfClientLiked,
+    pressLikeIfClientLiked, renderCard,
     renderCardOnFirstLoad,
-    setLikeCounter
+    setLikeCounter, updateLikes
 } from "./components/card";
+import {
+    addCardSubmitButton, avatarEditButton,
+    editAvatarSubmitButton,
+    editProfileSubmitButton,
+    likeActiveClass,
+    newAvatarUrlElement,
+    newCardLinkElement,
+    newCardNameElement,
+    newProfileDescriptionElement,
+    newProfileNameElement,
+    popupImage,
+    popupImageCaption,
+    popupImageView,
+    profileAvatar,
+    profileDescription,
+    profileName
+} from "./components/elements";
+import {closePopup, openPopup} from "./components/modal";
 
 let _id;
 
-getClientInfo()
-    .then(clientInfo => {
+const updateProfileInfo = (avatarLink, name, about) => {
+    profileName.textContent = name;
+    profileDescription.textContent = about;
+    profileAvatar.src = avatarLink;
+}
+
+const likeAction = (event, card) => {
+    const cardId = card.querySelector('.card__id').textContent;
+    const method = event.target.classList.contains(likeActiveClass) ? unlikeCard : likeCard;
+    method(cardId)
+        .then(newLikesNumber => updateLikes(event, newLikesNumber, card))
+        .catch(() => 'Ошибка при нажатии на лайк');
+};
+
+const deleteAction = (event, card) => {
+    const cardId = card.querySelector('.card__id').textContent;
+    deleteCard(cardId)
+        .then(() => event.target.closest('.card').remove())
+        .catch(() => console.error(`Ошибка удаления карточки ${cardId}`))
+        .catch(() => 'Ошибка при удалении карточки');
+};
+
+const openImageAction = (name, link) => {
+    popupImage.src = link;
+    popupImage.alt = name;
+    popupImageCaption.textContent = name;
+    openPopup(popupImageView);
+};
+
+export const editProfileInfo = event => {
+    event.preventDefault();
+    renderLoading(true, editProfileSubmitButton);
+    updateClientInfo(newProfileNameElement.value, newProfileDescriptionElement.value)
+        .then(() => {
+            profileName.textContent = newProfileNameElement.value;
+            profileDescription.textContent = newProfileDescriptionElement.value;
+            closePopup(event.target.closest('.popup'));
+        })
+        .catch(() => 'Ошибка обновления информации о профиле')
+        .finally(() => renderLoading(false, editProfileSubmitButton));
+};
+
+export const editAvatar = event => {
+    event.preventDefault();
+    renderLoading(true, editAvatarSubmitButton);
+    editAvatarRequest(newAvatarUrlElement.value)
+        .then(() => {
+            profileAvatar.src = newAvatarUrlElement.value;
+            closePopup(event.target.closest('.popup'));
+            event.target.reset();
+            disableButton(avatarEditButton, 'popup__submit-button_inactive');
+        })
+        .finally(() => renderLoading(false, editAvatarSubmitButton));
+};
+
+export const addCard = event => {
+    event.preventDefault();
+    renderLoading(true, addCardSubmitButton);
+    let cardId;
+    createCardRequest(newCardNameElement.value, newCardLinkElement.value)
+        .then(card => {
+            cardId = card._id;
+            return createCard(card.name, card.link)
+        })
+        .then(cardElement => assignId(cardElement, cardId))
+        .then(renderCard)
+        .then(() => {
+            closePopup(event.target.closest('.popup'));
+            event.target.reset();
+            disableButton(addCardSubmitButton, 'popup__submit-button_inactive');
+        })
+        .catch('Ошибка добавления карточки')
+        .finally(() => renderLoading(false, addCardSubmitButton));
+};
+
+Promise.all([getClientInfo(), getCards()])
+    .then(result => {
+        const clientInfo = result[0];
         _id = clientInfo._id;
         updateProfileInfo(clientInfo.avatar, clientInfo.name, clientInfo.about);
-    })
-    .then(() => getCards())
-    .then(cards => {
+
+        let cards = result[1];
         cards = cards.map(parseDateInCard).sort(sortCardsByDateDescending);
         cards.forEach(card => {
             checkImageAvailable(card.link)
-                .then(() => createCard(card.name, card.link))
+                .then(() => {
+                    const openImageListener = () => openImageAction(card.name, card.link);
+                    return createCard(card.name, card.link, likeAction, deleteAction, openImageListener)
+                })
                 .then(cardElement => assignId(cardElement, card._id))
                 .then(cardElement => setLikeCounter(cardElement, card.likes.length))
-                .then(cardElement => {
-                    const clientLiked = card.likes.map(user => user._id).includes(_id);
-                    return pressLikeIfClientLiked(cardElement, clientLiked)
-                })
+                .then(cardElement => pressLikeIfClientLiked(cardElement, card.likes, _id))
                 .then(cardElement => {
                     const isCardOwner = card.owner._id === _id;
                     return disableDeleteIfNotOwner(cardElement, isCardOwner);
