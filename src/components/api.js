@@ -5,6 +5,7 @@ const headers = {
 };
 const backendUrlPrefix = `https://mesto.nomoreparties.co/v1/${groupIdentifier}`;
 const clientUrl = `${backendUrlPrefix}/users/me`;
+const avatarEditUrl = `${clientUrl}/avatar`;
 const cardsUrl = `${backendUrlPrefix}/cards`;
 const cardLike = `${cardsUrl}/likes`;
 
@@ -58,7 +59,7 @@ function likeCard(cardId) {
         headers
     })
         .then(result => getJsonOrReject(result, 'Ошибка лайка карточки'))
-        .then(card => card.likes);
+        .then(card => card.likes.length);
 }
 
 function unlikeCard(cardId) {
@@ -67,7 +68,17 @@ function unlikeCard(cardId) {
         headers
     })
         .then(result => getJsonOrReject(result, 'Ошибка удаления лайка карточки'))
-        .then(card => card.likes);
+        .then(card => card.likes.length);
 }
 
-export {getCards, getClientInfo, updateClientInfo, createCard, deleteCard, likeCard, unlikeCard};
+function editAvatar(newAvatarUrl) {
+    return fetch(avatarEditUrl, {
+        method: 'PATCH',
+        headers,
+        body: JSON.stringify({
+            avatar: newAvatarUrl
+        })
+    })
+}
+
+export {getCards, getClientInfo, updateClientInfo, createCard, deleteCard, likeCard, unlikeCard, editAvatar};

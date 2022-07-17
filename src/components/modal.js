@@ -1,6 +1,6 @@
 import {assignId, createCard, renderCard} from "./card";
 import {disableButton} from "./validation";
-import {updateClientInfo, createCard as createCardRequest} from "./api";
+import {updateClientInfo, createCard as createCardRequest, editAvatar} from "./api";
 
 const popupEditProfile = document.querySelector('.popup_edit-profile');
 const newProfileNameElement = popupEditProfile.querySelector('.popup__input_data_name');
@@ -8,13 +8,16 @@ const newProfileDescriptionElement = popupEditProfile.querySelector('.popup__inp
 
 const profileInfo = document.querySelector('.profile__info');
 const profileName = profileInfo.querySelector('.profile__name');
-const profileAvatar = document.querySelector('.profile__avatar');
+const profileAvatar = document.querySelector('.profile__avatar-image');
 const profileDescription = profileInfo.querySelector('.profile__description');
 
 const popupAddCard = document.querySelector('.popup_add-card');
 const newCardNameElement = popupAddCard.querySelector('.popup__input_data_name');
 const newCardLinkElement = popupAddCard.querySelector('.popup__input_data_link');
 const addCardSubmitButton = popupAddCard.querySelector('.popup__submit-button');
+
+const popupEditAvatar = document.querySelector('.popup_edit-avatar');
+const newAvatarUrlElement = popupEditAvatar.querySelector('.popup__input');
 
 const closeByClickOutside = event => {
     const isClickOnImage = event.target.classList.contains('popup__figure-container');
@@ -92,5 +95,19 @@ popupAddCard.querySelector('.popup__edit-area').addEventListener('submit', event
             disableButton(addCardSubmitButton, 'popup__submit-button_inactive');
         })
 });
+
+const avatarEditButton = document.querySelector('.profile__avatar-edit-button');
+avatarEditButton.addEventListener('click', () => openPopup(popupEditAvatar));
+
+popupEditAvatar.querySelector('.popup__edit-area').addEventListener('submit', event => {
+    event.preventDefault();
+    editAvatar(newAvatarUrlElement.value)
+        .then(() => {
+            profileAvatar.src = newAvatarUrlElement.value;
+            closePopup(event.target.closest('.popup'));
+            event.target.reset();
+            disableButton(avatarEditButton, 'popup__submit-button_inactive');
+        });
+})
 
 export {openPopup, closePopup, updateProfileInfo};
