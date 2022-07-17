@@ -12,8 +12,8 @@ function parseDateInCard(card) {
     return card;
 }
 
-function sortCardsByDate(lhsCard, rhsCard) {
-    return lhsCard.createdAt - rhsCard.createdAt
+function sortCardsByDateDescending(lhsCard, rhsCard) {
+    return rhsCard.createdAt - lhsCard.createdAt;
 }
 
 function renderLoading(isLoading, button) {
@@ -24,4 +24,15 @@ function renderLoading(isLoading, button) {
     }
 }
 
-export {checkImageAvailable, parseDateInCard, sortCardsByDate, renderLoading};
+function shortenNumber(number) {
+    if (number > 1e3) {
+        return Math.round(number / 1e3 * 10) / 10 + 'k';
+    } else if (number > 1e6) {
+        return Math.round(number / 1e6 * 10) / 10 + 'm';
+    } else if (number > 1e9) {
+        return Math.round(number / 1e9 * 10) / 10 + 'm';
+    }
+    return number;
+}
+
+export {checkImageAvailable, parseDateInCard, sortCardsByDateDescending, renderLoading, shortenNumber};

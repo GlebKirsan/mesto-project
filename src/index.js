@@ -4,13 +4,13 @@ import {enableValidation} from "./components/validation";
 import {updateProfileInfo} from "./components/modal";
 
 import {getCards, getClientInfo} from "./components/api";
-import {checkImageAvailable, parseDateInCard, sortCardsByDate} from "./components/utils";
+import {checkImageAvailable, parseDateInCard, sortCardsByDateDescending} from "./components/utils";
 import {
     assignId,
     createCard,
     disableDeleteIfNotOwner,
     pressLikeIfClientLiked,
-    renderCard,
+    renderCardOnFirstLoad,
     setLikeCounter
 } from "./components/card";
 
@@ -23,7 +23,7 @@ getClientInfo()
     })
     .then(() => getCards())
     .then(cards => {
-        cards = cards.map(parseDateInCard).sort(sortCardsByDate);
+        cards = cards.map(parseDateInCard).sort(sortCardsByDateDescending);
         cards.forEach(card => {
             checkImageAvailable(card.link)
                 .then(() => createCard(card.name, card.link))
@@ -37,7 +37,7 @@ getClientInfo()
                     const isCardOwner = card.owner._id === _id;
                     return disableDeleteIfNotOwner(cardElement, isCardOwner);
                 })
-                .then(renderCard)
+                .then(renderCardOnFirstLoad)
                 .catch(() => console.error(`Изображение ${card.name} по ссылке ${card.link} не доступно.`));
         });
     });

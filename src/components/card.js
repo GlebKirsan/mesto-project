@@ -1,5 +1,6 @@
 import {openPopup} from "./modal";
 import {deleteCard, likeCard, unlikeCard} from "./api";
+import {shortenNumber} from "./utils";
 
 const cardsContainer = document.querySelector('.cards');
 const popupImageView = document.querySelector('.popup_image-view');
@@ -11,7 +12,7 @@ const cardForClone = cardTemplate.querySelector('.card');
 const likeActiveClass = 'card__like_active';
 
 function setLikeCounter(card, likesNumber) {
-    card.querySelector('.card__likes-counter').textContent = likesNumber;
+    card.querySelector('.card__likes-counter').textContent = shortenNumber(likesNumber);
     return card;
 }
 
@@ -69,8 +70,20 @@ const createCard = (name, link) => {
     return card;
 }
 
+const renderCardOnFirstLoad = card => {
+    cardsContainer.append(card);
+}
+
 const renderCard = card => {
     cardsContainer.prepend(card);
 };
 
-export {createCard, renderCard, setLikeCounter, pressLikeIfClientLiked, disableDeleteIfNotOwner, assignId};
+export {
+    createCard,
+    renderCard,
+    setLikeCounter,
+    pressLikeIfClientLiked,
+    disableDeleteIfNotOwner,
+    assignId,
+    renderCardOnFirstLoad
+};
