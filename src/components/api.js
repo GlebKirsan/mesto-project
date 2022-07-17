@@ -8,10 +8,10 @@ const clientUrl = `${backendUrlPrefix}/users/me`;
 const cardsUrl = `${backendUrlPrefix}/cards`;
 
 function getJsonOrReject(result, errorMessage) {
-    if (result.ok) {
+    if (result.status >= 200 && result.status < 300) {
         return result.json();
     }
-    return Promise.reject(errorMessage + " " + result.status);
+    return Promise.reject(errorMessage + `${result.status}.`);
 }
 
 function getClientInfo() {
@@ -44,4 +44,11 @@ function createCard(name, link) {
     }).then(result => getJsonOrReject(result, 'Ошибка создания новой карточки'));
 }
 
-export {getCards, getClientInfo, updateClientInfo, createCard};
+function deleteCard(cardId) {
+    return fetch(cardsUrl + `/${cardId}`, {
+        method: 'DELETE',
+        headers
+    }).then(result => getJsonOrReject(result, 'Ошибка удаления карточки'));
+}
+
+export {getCards, getClientInfo, updateClientInfo, createCard, deleteCard};

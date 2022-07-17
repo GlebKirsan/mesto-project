@@ -5,7 +5,14 @@ import {updateProfileInfo} from "./components/modal";
 
 import {getCards, getClientInfo} from "./components/api";
 import {checkImageAvailable, parseDateInCard, sortCardsByDate} from "./components/utils";
-import {createCard, pressLikeIfClientLiked, renderCard, setLikeCounter} from "./components/card";
+import {
+    assignId,
+    createCard,
+    disableDeleteIfNotOwner,
+    pressLikeIfClientLiked,
+    renderCard,
+    setLikeCounter
+} from "./components/card";
 
 let _id;
 
@@ -21,10 +28,15 @@ getCards()
         cards.forEach(card => {
             checkImageAvailable(card.link)
                 .then(() => createCard(card.name, card.link))
+                .then(cardElement => assignId(cardElement, card._id))
                 .then(cardElement => setLikeCounter(cardElement, card.likes.length))
                 .then(cardElement => {
                     const clientLiked = card.likes.map(user => user._id).includes(_id);
                     return pressLikeIfClientLiked(cardElement, clientLiked)
+                })
+                .then(cardElement => {
+                    const isCardOwner = card.owner._id === _id;
+                    return disableDeleteIfNotOwner(cardElement, isCardOwner);
                 })
                 .then(renderCard)
                 .catch(() => console.error(`Изображение ${card.name} по ссылке ${card.link} не доступно.`));

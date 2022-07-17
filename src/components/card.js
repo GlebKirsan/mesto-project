@@ -1,4 +1,5 @@
 import {openPopup} from "./modal";
+import {deleteCard} from "./api";
 
 const cardsContainer = document.querySelector('.cards');
 const popupImageView = document.querySelector('.popup_image-view');
@@ -20,6 +21,18 @@ function pressLikeIfClientLiked(card, clientLiked) {
     return card;
 }
 
+function disableDeleteIfNotOwner(card, isCardOwner) {
+    if (!isCardOwner) {
+        card.querySelector('.card__delete').remove();
+    }
+    return card;
+}
+
+function assignId(card, id) {
+    card.querySelector('.card__id').textContent = id;
+    return card;
+}
+
 const createCard = (name, link) => {
     const card = cardForClone.cloneNode(true);
 
@@ -32,7 +45,10 @@ const createCard = (name, link) => {
         event.target.classList.toggle('card__like_active');
     });
     card.querySelector('.card__delete').addEventListener('click', event => {
-        event.target.closest('.card').remove();
+        const cardId = card.querySelector('.card__id').textContent;
+        deleteCard(cardId)
+            .then(() => event.target.closest('.card').remove())
+            .catch(() => console.error(`Ошибка удаления карточки ${cardId}`));
     });
 
     cardImage.addEventListener('click', () => {
@@ -48,4 +64,4 @@ const renderCard = card => {
     cardsContainer.prepend(card);
 };
 
-export {createCard, renderCard, setLikeCounter, pressLikeIfClientLiked};
+export {createCard, renderCard, setLikeCounter, pressLikeIfClientLiked, disableDeleteIfNotOwner, assignId};

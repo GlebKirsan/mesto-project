@@ -15,6 +15,7 @@
 @import url('../blocks/photo-grid/photo-grid.css');
 @import url('../blocks/cards/cards.css');
 @import url('../blocks/card/card.css');
+@import url('../blocks/card/__id/card__id.css');
 @import url('../blocks/card/__delete/card__delete.css');
 @import url('../blocks/card/__image/card__image.css');
 @import url('../blocks/card/__info/card__info.css');
