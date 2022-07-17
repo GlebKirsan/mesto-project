@@ -16,4 +16,12 @@ function sortCardsByDate(lhsCard, rhsCard) {
     return lhsCard.createdAt - rhsCard.createdAt
 }
 
-export {checkImageAvailable, parseDateInCard, sortCardsByDate};
+function renderLoading(isLoading, button) {
+    if (isLoading) {
+        button.textContent = "Сохранение...";
+    } else {
+        button.textContent = "Сохранить";
+    }
+}
+
+export {checkImageAvailable, parseDateInCard, sortCardsByDate, renderLoading};
