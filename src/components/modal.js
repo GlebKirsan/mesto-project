@@ -1,4 +1,4 @@
-import {createCard, renderCard} from "./card";
+import {assignId, createCard, renderCard} from "./card";
 import {disableButton} from "./validation";
 import {updateClientInfo, createCard as createCardRequest} from "./api";
 
@@ -78,8 +78,13 @@ popupEditProfile.querySelector('.popup__edit-area').addEventListener('submit', e
 
 popupAddCard.querySelector('.popup__edit-area').addEventListener('submit', event => {
     event.preventDefault();
+    let cardId;
     createCardRequest(newCardNameElement.value, newCardLinkElement.value)
-        .then(card => createCard(card.name, card.value))
+        .then(card => {
+            cardId = card._id;
+            return createCard(card.name, card.link)
+        })
+        .then(cardElement => assignId(cardElement, cardId))
         .then(renderCard)
         .then(() => {
             closePopup(event.target.closest('.popup'));
