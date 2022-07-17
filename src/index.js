@@ -20,9 +20,8 @@ getClientInfo()
     .then(clientInfo => {
         _id = clientInfo._id;
         updateProfileInfo(clientInfo.avatar, clientInfo.name, clientInfo.about);
-    });
-
-getCards()
+    })
+    .then(() => getCards())
     .then(cards => {
         cards = cards.map(parseDateInCard).sort(sortCardsByDate);
         cards.forEach(card => {

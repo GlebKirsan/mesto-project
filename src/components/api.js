@@ -6,9 +6,10 @@ const headers = {
 const backendUrlPrefix = `https://mesto.nomoreparties.co/v1/${groupIdentifier}`;
 const clientUrl = `${backendUrlPrefix}/users/me`;
 const cardsUrl = `${backendUrlPrefix}/cards`;
+const cardLike = `${cardsUrl}/likes`;
 
 function getJsonOrReject(result, errorMessage) {
-    if (result.status >= 200 && result.status < 300) {
+    if (200 <= result.status && result.status < 300) {
         return result.json();
     }
     return Promise.reject(errorMessage + `${result.status}.`);
@@ -51,4 +52,22 @@ function deleteCard(cardId) {
     }).then(result => getJsonOrReject(result, 'Ошибка удаления карточки'));
 }
 
-export {getCards, getClientInfo, updateClientInfo, createCard, deleteCard};
+function likeCard(cardId) {
+    return fetch(cardLike + `/${cardId}`, {
+        method: 'PUT',
+        headers
+    })
+        .then(result => getJsonOrReject(result, 'Ошибка лайка карточки'))
+        .then(card => card.likes);
+}
+
+function unlikeCard(cardId) {
+    return fetch(cardLike + `/${cardId}`, {
+        method: 'DELETE',
+        headers
+    })
+        .then(result => getJsonOrReject(result, 'Ошибка удаления лайка карточки'))
+        .then(card => card.likes);
+}
+
+export {getCards, getClientInfo, updateClientInfo, createCard, deleteCard, likeCard, unlikeCard};
