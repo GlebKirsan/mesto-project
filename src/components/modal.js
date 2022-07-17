@@ -1,5 +1,6 @@
 import {createCard, renderCard} from "./card";
 import {disableButton} from "./validation";
+import {updateClientInfo} from "./api";
 
 const popupEditProfile = document.querySelector('.popup_edit-profile');
 const newProfileNameElement = popupEditProfile.querySelector('.popup__input_data_name');
@@ -67,10 +68,12 @@ closePopupButtons.forEach(button => button.addEventListener('click', event => {
 popupEditProfile.querySelector('.popup__edit-area').addEventListener('submit', event => {
     event.preventDefault();
 
-    profileName.textContent = newProfileNameElement.value;
-    profileDescription.textContent = newProfileDescriptionElement.value;
-
-    closePopup(event.target.closest('.popup'));
+    updateClientInfo(newProfileNameElement.value, newProfileDescriptionElement.value)
+        .then(() => {
+            profileName.textContent = newProfileNameElement.value;
+            profileDescription.textContent = newProfileDescriptionElement.value;
+            closePopup(event.target.closest('.popup'));
+        })
 });
 
 popupAddCard.querySelector('.popup__edit-area').addEventListener('submit', event => {

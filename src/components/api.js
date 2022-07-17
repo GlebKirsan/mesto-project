@@ -14,7 +14,26 @@ function getClientInfo() {
             return result.json();
         }
         return Promise.reject(`Ошибка получения информации о пользователе ${result.status}`);
-    })
+    });
+}
+
+function updateClientInfo(name, about) {
+    return fetch(clientUrl, {
+        method: 'PATCH',
+        headers: {
+            authorization: token,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: name,
+            about: about
+        })
+    }).then(result => {
+        if (result.ok) {
+            return result.json();
+        }
+        return Promise.reject(`Ошибка обновлении информации о пользователе ${result.status}`);
+    });
 }
 
 function getCards() {
@@ -30,4 +49,4 @@ function getCards() {
     });
 }
 
-export {getCards, getClientInfo};
+export {getCards, getClientInfo, updateClientInfo};
