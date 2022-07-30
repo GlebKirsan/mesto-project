@@ -5,7 +5,7 @@ on:
     types: [ opened, edited, reopened, synchronize ]
   push:
     branches:
-      - "^(?!feat\/mesto-update|main).+"
+      - "^(?!.*mesto-update|main).+"
 
 jobs:
   validate-branch-name:
