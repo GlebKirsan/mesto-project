@@ -1,0 +1,19 @@
+name: 'Assert Branch Naming Convention'
+on: 
+  pull_request:
+    branches: [ feat\/mesto-update ]
+    types: [ opened, edited, reopened, synchronize ]
+  push:
+    branches:
+      - "^(?!feat\/mesto-update|main).+"
+
+jobs:
+  validate-branch-name:
+    name: Branch Name Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Branch name rules
+        uses: deepakputhraya/action-branch-name@v1.0.0
+        with:
+          allowed_prefixes: 'feat,bugfix,hotfix'
