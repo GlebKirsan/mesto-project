@@ -1,7 +1,7 @@
 name: 'Assert Branch Naming Convention'
 on: 
   pull_request:
-    branches: [ feat\/mesto-update ]
+    branches: [ .*mesto-update ]
     types: [ opened, edited, reopened, synchronize ]
   push:
     branches:
