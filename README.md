@@ -19,3 +19,5 @@
 [Репозиторий](https://github.com/GlebKirsan/mesto-project)
 
 [Рабочая страничка](https://glebkirsan.github.io/mesto-project/)
+
+minor-change
