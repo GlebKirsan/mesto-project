@@ -34,11 +34,11 @@ export const likeActiveClass = 'card__like_active';
 
 export const groupIdentifier = 'plus-cohort-12';
 export const token = '5374e37d-a100-45c2-9054-8042aa4bada1';
-export const headers = {
-    authorization: token, 'Content-Type': 'application/json'
-};
 export const backendUrlPrefix = `https://mesto.nomoreparties.co/v1/${groupIdentifier}`;
-export const clientUrl = `${backendUrlPrefix}/users/me`;
-export const avatarEditUrl = `${clientUrl}/avatar`;
-export const cardsUrl = `${backendUrlPrefix}/cards`;
-export const cardLike = `${cardsUrl}/likes`;
+export const apiOptions = {
+    baseUrl: backendUrlPrefix,
+    headers: {
+        authorization: token,
+        'Content-Type': 'application/json'
+    }
+}

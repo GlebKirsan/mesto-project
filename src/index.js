@@ -2,16 +2,7 @@ import './pages/index.css';
 
 import {disableButton, enableValidation} from "./components/validation";
 
-import {
-    createCard as createCardRequest,
-    deleteCard,
-    getCards,
-    getClientInfo,
-    likeCard,
-    unlikeCard,
-    updateClientInfo,
-    editAvatar as editAvatarRequest
-} from "./components/api";
+import Api from "./components/api";
 import {checkImageAvailable, parseDateInCard, renderLoading, sortCardsByDateDescending} from "./components/utils";
 import {
     assignId,
@@ -36,11 +27,13 @@ import {
     popupImageView,
     profileAvatar,
     profileDescription,
-    profileName
+    profileName,
+    apiOptions
 } from "./components/elements";
 import {closePopup, openPopup} from "./components/modal";
 
 let _id;
+const api = new Api(apiOptions);
 
 const updateProfileInfo = (avatarLink, name, about) => {
     profileName.textContent = name;
@@ -50,7 +43,9 @@ const updateProfileInfo = (avatarLink, name, about) => {
 
 const likeAction = (event, card) => {
     const cardId = card.querySelector('.card__id').textContent;
-    const method = event.target.classList.contains(likeActiveClass) ? unlikeCard : likeCard;
+    const method = event.target.classList.contains(likeActiveClass)
+        ? api.unlikeCard.bind(api)
+        : api.likeCard.bind(api);
     method(cardId)
         .then(newLikesNumber => updateLikes(event, newLikesNumber, card))
         .catch(() => 'Ошибка при нажатии на лайк');
@@ -58,7 +53,7 @@ const likeAction = (event, card) => {
 
 const deleteAction = (event, card) => {
     const cardId = card.querySelector('.card__id').textContent;
-    deleteCard(cardId)
+    api.deleteCard.call(api, cardId)
         .then(() => event.target.closest('.card').remove())
         .catch(() => console.error(`Ошибка удаления карточки ${cardId}`))
         .catch(() => 'Ошибка при удалении карточки');
@@ -74,7 +69,7 @@ const openImageAction = (name, link) => {
 export const editProfileInfo = event => {
     event.preventDefault();
     renderLoading(true, editProfileSubmitButton);
-    updateClientInfo(newProfileNameElement.value, newProfileDescriptionElement.value)
+    api.updateClientInfo.call(api, newProfileNameElement.value, newProfileDescriptionElement.value)
         .then(() => {
             profileName.textContent = newProfileNameElement.value;
             profileDescription.textContent = newProfileDescriptionElement.value;
@@ -87,7 +82,7 @@ export const editProfileInfo = event => {
 export const editAvatar = event => {
     event.preventDefault();
     renderLoading(true, editAvatarSubmitButton);
-    editAvatarRequest(newAvatarUrlElement.value)
+    api.editAvatar.call(api, newAvatarUrlElement.value)
         .then(() => {
             profileAvatar.src = newAvatarUrlElement.value;
             closePopup(event.target.closest('.popup'));
@@ -101,7 +96,7 @@ export const addCard = event => {
     event.preventDefault();
     renderLoading(true, addCardSubmitButton);
     let cardId;
-    createCardRequest(newCardNameElement.value, newCardLinkElement.value)
+    api.createCard.call(api, newCardNameElement.value, newCardLinkElement.value)
         .then(card => {
             cardId = card._id;
             return createCard(card.name, card.link)
@@ -117,13 +112,11 @@ export const addCard = event => {
         .finally(() => renderLoading(false, addCardSubmitButton));
 };
 
-Promise.all([getClientInfo(), getCards()])
-    .then(result => {
-        const clientInfo = result[0];
+Promise.all([api.getClientInfo(), api.getCards()])
+    .then(([clientInfo, cards]) => {
         _id = clientInfo._id;
         updateProfileInfo(clientInfo.avatar, clientInfo.name, clientInfo.about);
 
-        let cards = result[1];
         cards = cards.map(parseDateInCard).sort(sortCardsByDateDescending);
         cards.forEach(card => {
             checkImageAvailable(card.link)

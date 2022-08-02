@@ -1,75 +1,81 @@
-import {avatarEditUrl, cardLike, cardsUrl, clientUrl, headers} from "./elements";
-
-function getJsonOrReject(result, errorMessage) {
-    if (200 <= result.status && result.status < 300) {
-        return result.json();
+export default class Api {
+    constructor(options) {
+        this._baseUrl = options.baseUrl;
+        this._headers = options.headers;
     }
-    return Promise.reject(errorMessage + `${result.status}.`);
-}
 
-function getClientInfo() {
-    return fetch(clientUrl, {
-        headers
-    }).then(result => getJsonOrReject(result, 'Ошибка получения информации о пользователе'));
-}
+    getClientInfo() {
+        return fetch(`${this._baseUrl}/users/me`, {
+            headers: this._headers
+        }).then(result => this._getJsonOrReject(result, 'Ошибка получения информации о пользователе'));
+    }
 
-function updateClientInfo(name, about) {
-    return fetch(clientUrl, {
-        method: 'PATCH', headers, body: JSON.stringify({
-            name: name, about: about
+    getCards() {
+        return fetch(`${this._baseUrl}/cards`, {
+            headers: this._headers
         })
-    }).then(result => getJsonOrReject(result, 'Ошибка обновлении информации о пользователе'));
-}
+            .then(result => this._getJsonOrReject(result, 'Ошибка получения карточек'));
+    }
 
-function getCards() {
-    return fetch(cardsUrl, {headers})
-        .then(result => getJsonOrReject(result, 'Ошибка получения карточек'));
-}
-
-function createCard(name, link) {
-    return fetch(cardsUrl, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-            name: name,
-            link: link
+    likeCard(cardId) {
+        return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+            method: 'PUT',
+            headers: this._headers
         })
-    }).then(result => getJsonOrReject(result, 'Ошибка создания новой карточки'));
-}
+            .then(result => this._getJsonOrReject(result, 'Ошибка лайка карточки'))
+            .then(card => card.likes.length);
+    }
 
-function deleteCard(cardId) {
-    return fetch(cardsUrl + `/${cardId}`, {
-        method: 'DELETE',
-        headers
-    }).then(result => getJsonOrReject(result, 'Ошибка удаления карточки'));
-}
-
-function likeCard(cardId) {
-    return fetch(cardLike + `/${cardId}`, {
-        method: 'PUT',
-        headers
-    })
-        .then(result => getJsonOrReject(result, 'Ошибка лайка карточки'))
-        .then(card => card.likes.length);
-}
-
-function unlikeCard(cardId) {
-    return fetch(cardLike + `/${cardId}`, {
-        method: 'DELETE',
-        headers
-    })
-        .then(result => getJsonOrReject(result, 'Ошибка удаления лайка карточки'))
-        .then(card => card.likes.length);
-}
-
-function editAvatar(newAvatarUrl) {
-    return fetch(avatarEditUrl, {
-        method: 'PATCH',
-        headers,
-        body: JSON.stringify({
-            avatar: newAvatarUrl
+    unlikeCard(cardId) {
+        return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+            method: 'DELETE',
+            headers: this._headers
         })
-    })
-}
+            .then(result => this._getJsonOrReject(result, 'Ошибка удаления лайка карточки'))
+            .then(card => card.likes.length);
+    }
 
-export {getCards, getClientInfo, updateClientInfo, createCard, deleteCard, likeCard, unlikeCard, editAvatar};
+    createCard(name, link) {
+        return fetch(`${this._baseUrl}/cards`, {
+            method: 'POST',
+            headers: this._headers,
+            body: JSON.stringify({
+                name: name, link: link
+            })
+        }).then(result => this._getJsonOrReject(result, 'Ошибка создания новой карточки'));
+    }
+
+    deleteCard(cardId) {
+        return fetch(`${this._baseUrl}/cards/${cardId}`, {
+            method: 'DELETE',
+            headers: this._headers
+        }).then(result => this._getJsonOrReject(result, 'Ошибка удаления карточки'));
+    }
+
+    updateClientInfo(name, about) {
+        return fetch(`${this._baseUrl}/users/me`, {
+            method: 'PATCH',
+            headers: this._headers,
+            body: JSON.stringify({
+                name: name, about: about
+            })
+        }).then(result => this._getJsonOrReject(result, 'Ошибка обновлении информации о пользователе'));
+    }
+
+    editAvatar(newAvatarUrl) {
+        return fetch(`${this._baseUrl}/users/me/avatar`, {
+            method: 'PATCH',
+            headers: this._headers,
+            body: JSON.stringify({
+                avatar: newAvatarUrl
+            })
+        }).then(result => this._getJsonOrReject(result, 'Ошибка обновления аватара пользователя'));
+    }
+
+    _getJsonOrReject(result, errorMessage) {
+        if (200 <= result.status && result.status < 300) {
+            return result.json();
+        }
+        return Promise.reject(errorMessage + ` ${result.status}.`);
+    }
+}
