@@ -5,12 +5,14 @@ import {disableButton, enableValidation} from "./components/validation";
 import Api from "./components/api";
 import {checkImageAvailable, parseDateInCard, renderLoading, sortCardsByDateDescending} from "./components/utils";
 import {
+    Card,
     assignId,
-    createCard,
     disableDeleteIfNotOwner,
-    pressLikeIfClientLiked, renderCard,
+    pressLikeIfClientLiked, 
+    renderCard,
+    setLikeCounter,
     renderCardOnFirstLoad,
-    setLikeCounter, updateLikes
+    updateLikes
 } from "./components/card";
 import {
     addCardSubmitButton, avatarEditButton,
@@ -28,7 +30,8 @@ import {
     profileAvatar,
     profileDescription,
     profileName,
-    apiOptions
+    apiOptions,
+    cardTemplate
 } from "./components/elements";
 import {closePopup, openPopup} from "./components/modal";
 
@@ -95,14 +98,8 @@ export const editAvatar = event => {
 export const addCard = event => {
     event.preventDefault();
     renderLoading(true, addCardSubmitButton);
-    let cardId;
     api.createCard.call(api, newCardNameElement.value, newCardLinkElement.value)
-        .then(card => {
-            cardId = card._id;
-            return createCard(card.name, card.link)
-        })
-        .then(cardElement => assignId(cardElement, cardId))
-        .then(renderCard)
+        .then(card => createCard(card, renderCard, _id))
         .then(() => {
             closePopup(event.target.closest('.popup'));
             event.target.reset();
@@ -118,23 +115,31 @@ Promise.all([api.getClientInfo(), api.getCards()])
         updateProfileInfo(clientInfo.avatar, clientInfo.name, clientInfo.about);
 
         cards = cards.map(parseDateInCard).sort(sortCardsByDateDescending);
-        cards.forEach(card => {
-            checkImageAvailable(card.link)
-                .then(() => {
-                    const openImageListener = () => openImageAction(card.name, card.link);
-                    return createCard(card.name, card.link, likeAction, deleteAction, openImageListener)
-                })
-                .then(cardElement => assignId(cardElement, card._id))
-                .then(cardElement => setLikeCounter(cardElement, card.likes.length))
-                .then(cardElement => pressLikeIfClientLiked(cardElement, card.likes, _id))
-                .then(cardElement => {
-                    const isCardOwner = card.owner._id === _id;
-                    return disableDeleteIfNotOwner(cardElement, isCardOwner);
-                })
-                .then(renderCardOnFirstLoad)
-                .catch(() => console.error(`Изображение ${card.name} по ссылке ${card.link} не доступно.`));
-        });
+        cards.forEach(card => createCard(card, renderCardOnFirstLoad, _id));
     });
+
+const createCard = (card, renderFunction, _id) => {
+    return checkImageAvailable(card.link)
+    .then(() => {
+        const cardObj = new Card({
+            data: card,
+            handleCardClick: () => openImageAction(card.name, card.link),
+            handleCardLike: api.likeCard.bind(api),
+            handleCardUnlike: api.unlikeCard.bind(api),
+            handleCardDelete: api.deleteCard.bind(api) }, cardTemplate);
+        const cardElement = cardObj.generate();
+        return cardElement;
+    })
+    .then(cardElement => assignId(cardElement, card._id))
+    .then(cardElement => setLikeCounter(cardElement, card.likes.length))
+    .then(cardElement => pressLikeIfClientLiked(cardElement, card.likes, _id))
+    .then(cardElement => {
+        const isCardOwner = card.owner._id === _id;
+        return disableDeleteIfNotOwner(cardElement, isCardOwner);
+    })
+    .then(renderFunction)
+    .catch(() => console.error(`Изображение ${card.name} по ссылке ${card.link} не доступно.`));
+}
 
 enableValidation({
     formSelector: '.popup__edit-area',

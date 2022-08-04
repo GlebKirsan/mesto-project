@@ -27,10 +27,8 @@ export const popupImageView = document.querySelector('.popup_image-view');
 export const popupImage = popupImageView.querySelector('.popup__image');
 export const popupImageCaption = popupImageView.querySelector('.popup__image-caption');
 
-export const cardTemplate = document.querySelector('#card-template').content;
-export const cardForClone = cardTemplate.querySelector('.card');
+export const cardTemplate = '#card-template';
 export const likeActiveClass = 'card__like_active';
-
 
 export const groupIdentifier = 'plus-cohort-12';
 export const token = '5374e37d-a100-45c2-9054-8042aa4bada1';
