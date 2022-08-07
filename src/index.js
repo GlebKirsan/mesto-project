@@ -1,24 +1,28 @@
 import './pages/index.css';
 
-import {disableButton, enableValidation} from "./components/validation";
-
-import Api from "./components/api";
-import {checkImageAvailable, parseDateInCard, renderLoading, sortCardsByDateDescending} from "./components/utils";
+import Api from "./components/Api";
 import {
-    Card,
+    checkImageAvailable,
+    disableButton,
+    parseDateInCard,
+    renderLoading,
+    sortCardsByDateDescending
+} from "./components/utils";
+import Card, {
     assignId,
     disableDeleteIfNotOwner,
-    pressLikeIfClientLiked, 
+    pressLikeIfClientLiked,
     renderCard,
-    setLikeCounter,
     renderCardOnFirstLoad,
-    updateLikes
-} from "./components/card";
+    setLikeCounter
+} from "./components/Card";
 import {
-    addCardSubmitButton, avatarEditButton,
+    addCardSubmitButton,
+    apiOptions,
+    avatarEditButton,
+    cardTemplate,
     editAvatarSubmitButton,
     editProfileSubmitButton,
-    likeActiveClass,
     newAvatarUrlElement,
     newCardLinkElement,
     newCardNameElement,
@@ -29,11 +33,10 @@ import {
     popupImageView,
     profileAvatar,
     profileDescription,
-    profileName,
-    apiOptions,
-    cardTemplate
+    profileName
 } from "./components/elements";
 import {closePopup, openPopup} from "./components/modal";
+import FormValidator from "./components/FormValidator";
 
 let _id;
 const api = new Api(apiOptions);
@@ -43,24 +46,6 @@ const updateProfileInfo = (avatarLink, name, about) => {
     profileDescription.textContent = about;
     profileAvatar.src = avatarLink;
 }
-
-const likeAction = (event, card) => {
-    const cardId = card.querySelector('.card__id').textContent;
-    const method = event.target.classList.contains(likeActiveClass)
-        ? api.unlikeCard.bind(api)
-        : api.likeCard.bind(api);
-    method(cardId)
-        .then(newLikesNumber => updateLikes(event, newLikesNumber, card))
-        .catch(() => 'Ошибка при нажатии на лайк');
-};
-
-const deleteAction = (event, card) => {
-    const cardId = card.querySelector('.card__id').textContent;
-    api.deleteCard.call(api, cardId)
-        .then(() => event.target.closest('.card').remove())
-        .catch(() => console.error(`Ошибка удаления карточки ${cardId}`))
-        .catch(() => 'Ошибка при удалении карточки');
-};
 
 const openImageAction = (name, link) => {
     popupImage.src = link;
@@ -105,7 +90,7 @@ export const addCard = event => {
             event.target.reset();
             disableButton(addCardSubmitButton, 'popup__submit-button_inactive');
         })
-        .catch('Ошибка добавления карточки')
+        .catch(() => 'Ошибка добавления карточки')
         .finally(() => renderLoading(false, addCardSubmitButton));
 };
 
@@ -127,8 +112,7 @@ const createCard = (card, renderFunction, _id) => {
             handleCardLike: api.likeCard.bind(api),
             handleCardUnlike: api.unlikeCard.bind(api),
             handleCardDelete: api.deleteCard.bind(api) }, cardTemplate);
-        const cardElement = cardObj.generate();
-        return cardElement;
+        return cardObj.generate();
     })
     .then(cardElement => assignId(cardElement, card._id))
     .then(cardElement => setLikeCounter(cardElement, card.likes.length))
@@ -141,11 +125,13 @@ const createCard = (card, renderFunction, _id) => {
     .catch(() => console.error(`Изображение ${card.name} по ссылке ${card.link} не доступно.`));
 }
 
-enableValidation({
-    formSelector: '.popup__edit-area',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__submit-button',
-    inactiveButtonClass: 'popup__submit-button_inactive',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__input-error_visible'
+document.querySelectorAll('.popup__edit-area').forEach(popupForm => {
+    new FormValidator({
+            inputSelector: '.popup__input',
+            submitButtonSelector: '.popup__submit-button',
+            inactiveButtonClass: 'popup__submit-button_inactive',
+            inputErrorClass: 'popup__input_type_error',
+            errorClass: 'popup__input-error_visible'
+        },
+        popupForm).enableValidation();
 });

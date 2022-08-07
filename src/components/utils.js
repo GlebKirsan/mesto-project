@@ -35,4 +35,9 @@ function shortenNumber(number) {
     return number;
 }
 
-export {checkImageAvailable, parseDateInCard, sortCardsByDateDescending, renderLoading, shortenNumber};
+const disableButton = (button, inactiveButtonClass) => {
+    button.classList.add(inactiveButtonClass);
+    button.disabled = true;
+};
+
+export {checkImageAvailable, parseDateInCard, sortCardsByDateDescending, renderLoading, shortenNumber, disableButton};
