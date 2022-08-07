@@ -22,7 +22,7 @@ export const avatarEditButton = document.querySelector('.profile__avatar-edit-bu
 export const addCardButton = document.querySelector('.profile__add-button');
 export const closePopupButtons = document.querySelectorAll('.popup__close-button');
 
-export const cardsContainer = document.querySelector('.cards');
+export const cardsContainer = '.cards';
 export const popupImageView = document.querySelector('.popup_image-view');
 export const popupImage = popupImageView.querySelector('.popup__image');
 export const popupImageCaption = popupImageView.querySelector('.popup__image-caption');

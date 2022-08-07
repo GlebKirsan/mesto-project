@@ -1,6 +1,7 @@
 import './pages/index.css';
 
 import Api from "./components/Api";
+import Section from './components/Section';
 import {
     checkImageAvailable,
     disableButton,
@@ -12,8 +13,6 @@ import Card, {
     assignId,
     disableDeleteIfNotOwner,
     pressLikeIfClientLiked,
-    renderCard,
-    renderCardOnFirstLoad,
     setLikeCounter
 } from "./components/Card";
 import {
@@ -33,9 +32,10 @@ import {
     popupImageView,
     profileAvatar,
     profileDescription,
-    profileName
+    profileName,
+    cardsContainer
 } from "./components/elements";
-import {closePopup, openPopup} from "./components/modal";
+import { closePopup, openPopup } from "./components/modal";
 import FormValidator from "./components/FormValidator";
 
 let _id;
@@ -53,6 +53,8 @@ const openImageAction = (name, link) => {
     popupImageCaption.textContent = name;
     openPopup(popupImageView);
 };
+
+let CardList;
 
 export const editProfileInfo = event => {
     event.preventDefault();
@@ -84,7 +86,8 @@ export const addCard = event => {
     event.preventDefault();
     renderLoading(true, addCardSubmitButton);
     api.createCard.call(api, newCardNameElement.value, newCardLinkElement.value)
-        .then(card => createCard(card, renderCard, _id))
+        .then(card => createCard(card, _id))
+        .then(card => CardList.addItem(card))
         .then(() => {
             closePopup(event.target.closest('.popup'));
             event.target.reset();
@@ -100,38 +103,46 @@ Promise.all([api.getClientInfo(), api.getCards()])
         updateProfileInfo(clientInfo.avatar, clientInfo.name, clientInfo.about);
 
         cards = cards.map(parseDateInCard).sort(sortCardsByDateDescending);
-        cards.forEach(card => createCard(card, renderCardOnFirstLoad, _id));
+
+        CardList = new Section({
+            items: cards,
+            renderer: (card) => {
+                createCard(card, _id)
+                    .then((cardElement) => CardList.addItem(cardElement, false))
+                    .catch(() => console.error(`Изображение ${card.name} по ссылке ${card.link} не доступно.`));
+            }
+        }, cardsContainer);
+        CardList.renderItems();
     });
 
-const createCard = (card, renderFunction, _id) => {
+const createCard = (card, _id) => {
     return checkImageAvailable(card.link)
-    .then(() => {
-        const cardObj = new Card({
-            data: card,
-            handleCardClick: () => openImageAction(card.name, card.link),
-            handleCardLike: api.likeCard.bind(api),
-            handleCardUnlike: api.unlikeCard.bind(api),
-            handleCardDelete: api.deleteCard.bind(api) }, cardTemplate);
-        return cardObj.generate();
-    })
-    .then(cardElement => assignId(cardElement, card._id))
-    .then(cardElement => setLikeCounter(cardElement, card.likes.length))
-    .then(cardElement => pressLikeIfClientLiked(cardElement, card.likes, _id))
-    .then(cardElement => {
-        const isCardOwner = card.owner._id === _id;
-        return disableDeleteIfNotOwner(cardElement, isCardOwner);
-    })
-    .then(renderFunction)
-    .catch(() => console.error(`Изображение ${card.name} по ссылке ${card.link} не доступно.`));
+        .then(() => {
+            const cardObj = new Card({
+                data: card,
+                handleCardClick: () => openImageAction(card.name, card.link),
+                handleCardLike: api.likeCard.bind(api),
+                handleCardUnlike: api.unlikeCard.bind(api),
+                handleCardDelete: api.deleteCard.bind(api)
+            }, cardTemplate);
+            return cardObj.generate();
+        })
+        .then(cardElement => assignId(cardElement, card._id))
+        .then(cardElement => setLikeCounter(cardElement, card.likes.length))
+        .then(cardElement => pressLikeIfClientLiked(cardElement, card.likes, _id))
+        .then(cardElement => {
+            const isCardOwner = card.owner._id === _id;
+            return disableDeleteIfNotOwner(cardElement, isCardOwner);
+        })
 }
 
 document.querySelectorAll('.popup__edit-area').forEach(popupForm => {
     new FormValidator({
-            inputSelector: '.popup__input',
-            submitButtonSelector: '.popup__submit-button',
-            inactiveButtonClass: 'popup__submit-button_inactive',
-            inputErrorClass: 'popup__input_type_error',
-            errorClass: 'popup__input-error_visible'
-        },
+        inputSelector: '.popup__input',
+        submitButtonSelector: '.popup__submit-button',
+        inactiveButtonClass: 'popup__submit-button_inactive',
+        inputErrorClass: 'popup__input_type_error',
+        errorClass: 'popup__input-error_visible'
+    },
         popupForm).enableValidation();
 });

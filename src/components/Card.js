@@ -1,5 +1,5 @@
 import { shortenNumber } from "./utils";
-import { cardsContainer, likeActiveClass } from "./elements";
+import { likeActiveClass } from "./elements";
 
 export default class Card {
     constructor({ data, handleCardClick, handleCardLike, handleCardUnlike, handleCardDelete }, selector) {
@@ -103,21 +103,11 @@ function assignId(card, id) {
     return card;
 }
 
-const renderCardOnFirstLoad = card => {
-    cardsContainer.append(card);
-}
-
-const renderCard = card => {
-    cardsContainer.prepend(card);
-};
-
 export {
     Card,
-    renderCard,
     setLikeCounter,
     pressLikeIfClientLiked,
     disableDeleteIfNotOwner,
     assignId,
-    renderCardOnFirstLoad,
     updateLikes
 };
