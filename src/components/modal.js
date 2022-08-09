@@ -3,11 +3,9 @@ import {
     editProfileButton,
     newProfileDescriptionElement,
     newProfileNameElement, popupAddCard, popupEditAvatar,
-    popupEditProfile,
-    profileDescription,
-    profileName
+    popupEditProfile
 } from "./elements";
-import {addCard, editAvatar, editProfileInfo} from "../index";
+import {addCard, editAvatar, editProfileInfo, userInfo} from "../index";
 
 const closeByClickOutside = event => {
     const isClickOnImage = event.target.classList.contains('popup__figure-container');
@@ -37,8 +35,9 @@ const closePopup = popup => {
 };
 
 editProfileButton.addEventListener('click', () => {
-    newProfileNameElement.value = profileName.textContent;
-    newProfileDescriptionElement.value = profileDescription.textContent;
+    const userData = userInfo.getUserInfo();
+    newProfileNameElement.value = userData.name;
+    newProfileDescriptionElement.value = userData.about;
 
     openPopup(popupEditProfile);
 });

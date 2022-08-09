@@ -22,7 +22,6 @@ export default class FormValidator {
     _setEventListeners() {
         const formInputs = Array.from(this._popupForm.querySelectorAll(this._inputSelector));
         const submitButton = this._popupForm.querySelector(this._submitButtonSelector);
-        console.log(formInputs);
         this._toggleButtonState(formInputs, submitButton);
 
         formInputs.forEach(formInput => formInput.addEventListener('input', () => {

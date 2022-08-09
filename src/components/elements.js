@@ -4,9 +4,9 @@ export const newProfileDescriptionElement = popupEditProfile.querySelector('.pop
 export const editProfileSubmitButton = popupEditProfile.querySelector('.popup__submit-button');
 
 export const profileInfo = document.querySelector('.profile__info');
-export const profileName = profileInfo.querySelector('.profile__name');
-export const profileAvatar = document.querySelector('.profile__avatar-image');
-export const profileDescription = profileInfo.querySelector('.profile__description');
+export const profileName = '.profile__name';
+export const profileAvatar = '.profile__avatar-image';
+export const profileDescription = '.profile__description';
 
 export const popupAddCard = document.querySelector('.popup_add-card');
 export const newCardNameElement = popupAddCard.querySelector('.popup__input_data_name');

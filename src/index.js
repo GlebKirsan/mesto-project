@@ -37,15 +37,15 @@ import {
 } from "./components/elements";
 import { closePopup, openPopup } from "./components/modal";
 import FormValidator from "./components/FormValidator";
+import UserInfo from "./components/UserInfo"
 
 let _id;
 const api = new Api(apiOptions);
-
-const updateProfileInfo = (avatarLink, name, about) => {
-    profileName.textContent = name;
-    profileDescription.textContent = about;
-    profileAvatar.src = avatarLink;
-}
+let cardList;
+export let userInfo = new UserInfo({
+    nameSelector: profileName,
+    aboutSelector: profileDescription,
+    avatarSelector: profileAvatar});
 
 const openImageAction = (name, link) => {
     popupImage.src = link;
@@ -54,15 +54,15 @@ const openImageAction = (name, link) => {
     openPopup(popupImageView);
 };
 
-let CardList;
-
 export const editProfileInfo = event => {
     event.preventDefault();
     renderLoading(true, editProfileSubmitButton);
     api.updateClientInfo.call(api, newProfileNameElement.value, newProfileDescriptionElement.value)
         .then(() => {
-            profileName.textContent = newProfileNameElement.value;
-            profileDescription.textContent = newProfileDescriptionElement.value;
+            userInfo.setUserInfo({
+                name: newProfileNameElement.value, 
+                about: newProfileDescriptionElement.value
+            })
             closePopup(event.target.closest('.popup'));
         })
         .catch(() => 'Ошибка обновления информации о профиле')
@@ -74,7 +74,9 @@ export const editAvatar = event => {
     renderLoading(true, editAvatarSubmitButton);
     api.editAvatar.call(api, newAvatarUrlElement.value)
         .then(() => {
-            profileAvatar.src = newAvatarUrlElement.value;
+            userInfo.setUserInfo({
+                avatarLink: newAvatarUrlElement.value
+            })
             closePopup(event.target.closest('.popup'));
             event.target.reset();
             disableButton(avatarEditButton, 'popup__submit-button_inactive');
@@ -87,7 +89,7 @@ export const addCard = event => {
     renderLoading(true, addCardSubmitButton);
     api.createCard.call(api, newCardNameElement.value, newCardLinkElement.value)
         .then(card => createCard(card, _id))
-        .then(card => CardList.addItem(card))
+        .then(card => cardList.addItem(card))
         .then(() => {
             closePopup(event.target.closest('.popup'));
             event.target.reset();
@@ -100,19 +102,22 @@ export const addCard = event => {
 Promise.all([api.getClientInfo(), api.getCards()])
     .then(([clientInfo, cards]) => {
         _id = clientInfo._id;
-        updateProfileInfo(clientInfo.avatar, clientInfo.name, clientInfo.about);
+        userInfo.setUserInfo({
+            avatarLink: clientInfo.avatar,
+            name: clientInfo.name,
+            about: clientInfo.about
+        });
 
         cards = cards.map(parseDateInCard).sort(sortCardsByDateDescending);
-
-        CardList = new Section({
+        cardList = new Section({
             items: cards,
             renderer: (card) => {
                 createCard(card, _id)
-                    .then((cardElement) => CardList.addItem(cardElement, false))
+                    .then((cardElement) => cardList.addItem(cardElement, false))
                     .catch(() => console.error(`Изображение ${card.name} по ссылке ${card.link} не доступно.`));
             }
         }, cardsContainer);
-        CardList.renderItems();
+        cardList.renderItems();
     });
 
 const createCard = (card, _id) => {
