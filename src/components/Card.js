@@ -20,18 +20,18 @@ export default class Card {
             .cloneNode(true);
     }
 
-    _likeListener(event) {
+    _likeListener() {
         const cardId = this._getCardId();
-        const method = event.target.classList.contains(likeActiveClass)
+        const method = this._likeElement.classList.contains(likeActiveClass)
             ? this._handleCardUnlike
             : this._handleCardLike;
         method(cardId)
-            .then(newLikesNumber => this._updateLikes(event, newLikesNumber))
+            .then(newLikesNumber => this._updateLikes(newLikesNumber))
             .catch(() => 'Ошибка при нажатии на лайк');
     }
 
-    _updateLikes(event, likesNumber) {
-        event.target.classList.toggle(likeActiveClass);
+    _updateLikes(likesNumber) {
+        this._likeElement.classList.toggle(likeActiveClass);
         this._setLikeCounter(likesNumber);
     }
 
@@ -39,21 +39,22 @@ export default class Card {
         this._element.querySelector('.card__likes-counter').textContent = shortenNumber(likesNumber);
     }
 
-    _deleteListener(event) {
+    _deleteListener() {
         const cardId = this._getCardId();
         this._handleCardDelete(cardId)
-            .then(() => event.target.closest('.card').remove())
+            .then(() => this._element.closest('.card').remove())
             .catch(() => console.error(`Ошибка удаления карточки ${cardId}`))
             .catch(() => 'Ошибка при удалении карточки');
-    }
+        this._element = null;
+        }
 
     _getCardId() {
         return this._element.querySelector('.card__id').textContent;
     }
 
     _setEventListeners() {
-        this._element.querySelector('.card__like').addEventListener('click', event => this._likeListener(event));
-        this._element.querySelector('.card__delete').addEventListener('click', event => this._deleteListener(event));
+        this._likeElement.addEventListener('click', () => this._likeListener());
+        this._element.querySelector('.card__delete').addEventListener('click', () => this._deleteListener());
         this._cardImageElement.addEventListener('click', this._handleCardClick);
     }
 
@@ -64,6 +65,8 @@ export default class Card {
         this._cardImageElement.src = this._link;
         this._cardImageElement.alt = this._name;
         this._element.querySelector('.card__name').textContent = this._name;
+
+        this._likeElement = this._element.querySelector('.card__like');
 
         this._setEventListeners();
 
