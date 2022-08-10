@@ -1,5 +1,4 @@
 import Popup from "./Popup";
-import {disableButton} from "./utils";
 
 export default class PopupWithForm extends Popup {
     constructor(popupSelector, submitCallback) {
@@ -18,7 +17,6 @@ export default class PopupWithForm extends Popup {
     close() {
         super.close();
         this._form.reset();
-        disableButton(this._sumbitButton)
     }
 
     setEventListeners() {

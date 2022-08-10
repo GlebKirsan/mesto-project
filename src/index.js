@@ -3,7 +3,7 @@ import './pages/index.css';
 import Api from "./components/Api";
 import Section from './components/Section';
 import {
-    checkImageAvailable,
+    checkImageAvailable, disableButton,
     parseDateInCard,
     renderLoading,
     sortCardsByDateDescending
@@ -65,7 +65,8 @@ const editAvatar = (event, button, inputValues) => {
         .then(response => {
             userInfo.setUserInfo({
                 avatarLink: response.avatar
-            })
+            });
+            disableButton(button);
         })
         .finally(() => renderLoading(false, button));
 };
@@ -77,7 +78,10 @@ const addCard = (event, button, inputValues) => {
     const [cardName, cardImageLink] = inputValues;
     api.createCard.call(api, cardName, cardImageLink)
         .then(card => createCard(card, _id))
-        .then(card => cardList.addItem(card))
+        .then(card => {
+            cardList.addItem(card)
+            disableButton(button);
+        })
         .catch(() => 'Ошибка добавления карточки')
         .finally(() => renderLoading(false, button));
 };
