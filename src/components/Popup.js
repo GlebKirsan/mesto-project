@@ -21,7 +21,7 @@ export default class Popup {
     }
 
     _closeByClickOutside(event) {
-        if (event.target.offsetParent === null) {
+        if (event.target.classList.contains('popup')) {
             this.close();
         }
     }
