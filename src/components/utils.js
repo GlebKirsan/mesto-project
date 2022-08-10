@@ -35,8 +35,8 @@ function shortenNumber(number) {
     return number;
 }
 
-const disableButton = (button, inactiveButtonClass) => {
-    button.classList.add(inactiveButtonClass);
+const disableButton = button => {
+    button.classList.add('popup__submit-button_inactive');
     button.disabled = true;
 };
 

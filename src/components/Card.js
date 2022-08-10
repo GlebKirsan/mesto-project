@@ -1,5 +1,5 @@
-import { shortenNumber } from "./utils";
-import { likeActiveClass } from "./elements";
+import {shortenNumber} from "./utils";
+import {likeActiveClass} from "./constants";
 
 export default class Card {
     constructor({ data, handleCardClick, handleCardLike, handleCardUnlike, handleCardDelete }, selector) {
@@ -13,13 +13,11 @@ export default class Card {
     }
 
     _getElement() {
-        const cardElement = document
+        return document
             .querySelector(this._selector)
             .content
             .querySelector('.card')
             .cloneNode(true);
-
-        return cardElement;
     }
 
     _likeListener(event) {
@@ -78,11 +76,6 @@ function setLikeCounter(card, likesNumber) {
     return card;
 }
 
-function updateLikes(event, likesNumber, card) {
-    event.target.classList.toggle(likeActiveClass);
-    setLikeCounter(card, likesNumber);
-}
-
 function pressLikeIfClientLiked(card, likes, clientId) {
     const clientLiked = likes.map(user => user._id).includes(clientId);
     if (clientLiked) {
@@ -108,6 +101,5 @@ export {
     setLikeCounter,
     pressLikeIfClientLiked,
     disableDeleteIfNotOwner,
-    assignId,
-    updateLikes
+    assignId
 };

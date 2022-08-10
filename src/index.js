@@ -4,7 +4,6 @@ import Api from "./components/Api";
 import Section from './components/Section';
 import {
     checkImageAvailable,
-    disableButton,
     parseDateInCard,
     renderLoading,
     sortCardsByDateDescending
@@ -16,28 +15,22 @@ import Card, {
     setLikeCounter
 } from "./components/Card";
 import {
-    addCardSubmitButton,
     apiOptions,
-    avatarEditButton,
     cardTemplate,
-    editAvatarSubmitButton,
-    editProfileSubmitButton,
-    newAvatarUrlElement,
-    newCardLinkElement,
-    newCardNameElement,
-    newProfileDescriptionElement,
-    newProfileNameElement,
-    popupImage,
-    popupImageCaption,
-    popupImageView,
     profileAvatar,
     profileDescription,
     profileName,
-    cardsContainer
-} from "./components/elements";
-import { closePopup, openPopup } from "./components/modal";
+    cardsContainer,
+    popupImageSelector,
+    popupProfileInfoSelector,
+    popupEditAvatarSelector,
+    popupAddCardSelector,
+    editProfileButton, newProfileNameElement, newProfileDescriptionElement, addCardButton, avatarEditButton
+} from "./components/constants";
 import FormValidator from "./components/FormValidator";
 import UserInfo from "./components/UserInfo"
+import PopupWithImage from "./components/PopupWithImage";
+import PopupWithForm from "./components/PopupWithForm";
 
 let _id;
 const api = new Api(apiOptions);
@@ -47,57 +40,59 @@ export let userInfo = new UserInfo({
     aboutSelector: profileDescription,
     avatarSelector: profileAvatar});
 
-const openImageAction = (name, link) => {
-    popupImage.src = link;
-    popupImage.alt = name;
-    popupImageCaption.textContent = name;
-    openPopup(popupImageView);
-};
+const imagePopup = new PopupWithImage(popupImageSelector);
+imagePopup.setEventListeners();
 
-export const editProfileInfo = event => {
-    event.preventDefault();
-    renderLoading(true, editProfileSubmitButton);
-    api.updateClientInfo.call(api, newProfileNameElement.value, newProfileDescriptionElement.value)
-        .then(() => {
+const editProfileInfo = (event, button, inputValues) => {
+    renderLoading(true, button);
+    const [name, description] = inputValues;
+    api.updateClientInfo.call(api, name, description)
+        .then(response =>
             userInfo.setUserInfo({
-                name: newProfileNameElement.value, 
-                about: newProfileDescriptionElement.value
-            })
-            closePopup(event.target.closest('.popup'));
-        })
+                name: response.name,
+                about: response.about
+            }))
         .catch(() => 'Ошибка обновления информации о профиле')
-        .finally(() => renderLoading(false, editProfileSubmitButton));
+        .finally(() => renderLoading(false, button));
 };
+export const profileInfoPopup = new PopupWithForm(popupProfileInfoSelector, editProfileInfo);
+profileInfoPopup.setEventListeners();
 
-export const editAvatar = event => {
-    event.preventDefault();
-    renderLoading(true, editAvatarSubmitButton);
-    api.editAvatar.call(api, newAvatarUrlElement.value)
-        .then(() => {
+const editAvatar = (event, button, inputValues) => {
+    renderLoading(true, button);
+    const [newAvatarUrl] = inputValues;
+    api.editAvatar.call(api, newAvatarUrl)
+        .then(response => {
             userInfo.setUserInfo({
-                avatarLink: newAvatarUrlElement.value
+                avatarLink: response.avatar
             })
-            closePopup(event.target.closest('.popup'));
-            event.target.reset();
-            disableButton(avatarEditButton, 'popup__submit-button_inactive');
         })
-        .finally(() => renderLoading(false, editAvatarSubmitButton));
+        .finally(() => renderLoading(false, button));
 };
+export const editAvatarPopup = new PopupWithForm(popupEditAvatarSelector, editAvatar);
+editAvatarPopup.setEventListeners();
 
-export const addCard = event => {
-    event.preventDefault();
-    renderLoading(true, addCardSubmitButton);
-    api.createCard.call(api, newCardNameElement.value, newCardLinkElement.value)
+const addCard = (event, button, inputValues) => {
+    renderLoading(true, button);
+    const [cardName, cardImageLink] = inputValues;
+    api.createCard.call(api, cardName, cardImageLink)
         .then(card => createCard(card, _id))
         .then(card => cardList.addItem(card))
-        .then(() => {
-            closePopup(event.target.closest('.popup'));
-            event.target.reset();
-            disableButton(addCardSubmitButton, 'popup__submit-button_inactive');
-        })
         .catch(() => 'Ошибка добавления карточки')
-        .finally(() => renderLoading(false, addCardSubmitButton));
+        .finally(() => renderLoading(false, button));
 };
+export const addCardPopup = new PopupWithForm(popupAddCardSelector, addCard);
+addCardPopup.setEventListeners();
+
+editProfileButton.addEventListener('click', () => {
+    const userData = userInfo.getUserInfo();
+    newProfileNameElement.value = userData.name;
+    newProfileDescriptionElement.value = userData.about;
+
+    profileInfoPopup.open();
+});
+addCardButton.addEventListener('click', () => addCardPopup.open());
+avatarEditButton.addEventListener('click', () => editAvatarPopup.open());
 
 Promise.all([api.getClientInfo(), api.getCards()])
     .then(([clientInfo, cards]) => {
@@ -125,7 +120,7 @@ const createCard = (card, _id) => {
         .then(() => {
             const cardObj = new Card({
                 data: card,
-                handleCardClick: () => openImageAction(card.name, card.link),
+                handleCardClick: () => imagePopup.open(card.name, card.link),
                 handleCardLike: api.likeCard.bind(api),
                 handleCardUnlike: api.unlikeCard.bind(api),
                 handleCardDelete: api.deleteCard.bind(api)
@@ -143,11 +138,11 @@ const createCard = (card, _id) => {
 
 document.querySelectorAll('.popup__edit-area').forEach(popupForm => {
     new FormValidator({
-        inputSelector: '.popup__input',
-        submitButtonSelector: '.popup__submit-button',
-        inactiveButtonClass: 'popup__submit-button_inactive',
-        inputErrorClass: 'popup__input_type_error',
-        errorClass: 'popup__input-error_visible'
-    },
+            inputSelector: '.popup__input',
+            submitButtonSelector: '.popup__submit-button',
+            inactiveButtonClass: 'popup__submit-button_inactive',
+            inputErrorClass: 'popup__input_type_error',
+            errorClass: 'popup__input-error_visible'
+        },
         popupForm).enableValidation();
 });
