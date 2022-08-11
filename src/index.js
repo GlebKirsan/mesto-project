@@ -3,7 +3,7 @@ import './pages/index.css';
 import Api from "./components/Api";
 import Section from './components/Section';
 import {
-    checkImageAvailable, disableButton,
+    checkImageAvailable,
     parseDateInCard,
     renderLoading,
     sortCardsByDateDescending
@@ -66,7 +66,7 @@ const editAvatar = (event, button, inputValues) => {
             userInfo.setUserInfo({
                 avatarLink: response.avatar
             });
-            disableButton(button);
+            avatarForm.disableButton();
         })
         .finally(() => renderLoading(false, button));
 };
@@ -80,7 +80,7 @@ const addCard = (event, button, inputValues) => {
         .then(card => createCard(card, _id))
         .then(card => {
             cardList.addItem(card)
-            disableButton(button);
+            newCardForm.disableButton(button);
         })
         .catch(() => 'Ошибка добавления карточки')
         .finally(() => renderLoading(false, button));
@@ -140,13 +140,18 @@ const createCard = (card, _id) => {
         })
 }
 
-document.querySelectorAll('.popup__edit-area').forEach(popupForm => {
-    new FormValidator({
-            inputSelector: '.popup__input',
-            submitButtonSelector: '.popup__submit-button',
-            inactiveButtonClass: 'popup__submit-button_inactive',
-            inputErrorClass: 'popup__input_type_error',
-            errorClass: 'popup__input-error_visible'
-        },
-        popupForm).enableValidation();
-});
+const params = {
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__submit-button',
+    inactiveButtonClass: 'popup__submit-button_inactive',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__input-error_visible'
+};
+
+const avatarForm = new FormValidator(params, document.querySelector('[name="editAvatar"]'));
+const userInfoForm = new FormValidator(params, document.querySelector('[name="editUserInfo"]'));
+const newCardForm = new FormValidator(params, document.querySelector('[name="addCard"]'));
+
+avatarForm.enableValidation();
+userInfoForm.enableValidation();
+newCardForm.enableValidation();
