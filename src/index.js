@@ -8,12 +8,7 @@ import {
     renderLoading,
     sortCardsByDateDescending
 } from "./components/utils";
-import Card, {
-    assignId,
-    disableDeleteIfNotOwner,
-    pressLikeIfClientLiked,
-    setLikeCounter
-} from "./components/Card";
+import Card from "./components/Card";
 import {
     apiOptions,
     cardTemplate,
@@ -129,15 +124,27 @@ const createCard = (card, _id) => {
                 handleCardUnlike: api.unlikeCard.bind(api),
                 handleCardDelete: api.deleteCard.bind(api)
             }, cardTemplate);
-            return cardObj.generate();
+            cardObj.generate();
+            return cardObj;
         })
-        .then(cardElement => assignId(cardElement, card._id))
-        .then(cardElement => setLikeCounter(cardElement, card.likes.length))
-        .then(cardElement => pressLikeIfClientLiked(cardElement, card.likes, _id))
+        .then(cardElement => {
+            cardElement.assignId(card._id);
+            return cardElement;
+        })
+        .then(cardElement => {
+            cardElement.setLikeCounter(card.likes.length)
+            return cardElement;
+        })
+        .then(cardElement => {
+            cardElement.pressLikeIfClientLiked(card.likes, _id);
+            return cardElement;
+        })
         .then(cardElement => {
             const isCardOwner = card.owner._id === _id;
-            return disableDeleteIfNotOwner(cardElement, isCardOwner);
+            cardElement.disableDeleteIfNotOwner(isCardOwner);
+            return cardElement;
         })
+        .then(cardElement => cardElement.returnElement())
 }
 
 const params = {

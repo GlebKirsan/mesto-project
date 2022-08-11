@@ -32,10 +32,10 @@ export default class Card {
 
     _updateLikes(likesNumber) {
         this._likeElement.classList.toggle(likeActiveClass);
-        this._setLikeCounter(likesNumber);
+        this.setLikeCounter(likesNumber);
     }
 
-    _setLikeCounter(likesNumber) {
+    setLikeCounter(likesNumber) {
         this._element.querySelector('.card__likes-counter').textContent = shortenNumber(likesNumber);
     }
 
@@ -69,40 +69,28 @@ export default class Card {
         this._likeElement = this._element.querySelector('.card__like');
 
         this._setEventListeners();
+    }
 
+    assignId(id) {
+        this._element.querySelector('.card__id').textContent = id;
+    }
+
+    disableDeleteIfNotOwner(isCardOwner) {
+        if (!isCardOwner) {
+            this._element.querySelector('.card__delete').remove();
+        }
+    }
+
+    pressLikeIfClientLiked(likes, clientId) {
+        const clientLiked = likes.map(user => user._id).includes(clientId);
+        if (clientLiked) {
+            this._element.querySelector('.card__like').classList.add('card__like_active');
+        }
+    }
+
+    returnElement () {
         return this._element;
     }
 }
 
-function setLikeCounter(card, likesNumber) {
-    card.querySelector('.card__likes-counter').textContent = shortenNumber(likesNumber);
-    return card;
-}
-
-function pressLikeIfClientLiked(card, likes, clientId) {
-    const clientLiked = likes.map(user => user._id).includes(clientId);
-    if (clientLiked) {
-        card.querySelector('.card__like').classList.add('card__like_active');
-    }
-    return card;
-}
-
-function disableDeleteIfNotOwner(card, isCardOwner) {
-    if (!isCardOwner) {
-        card.querySelector('.card__delete').remove();
-    }
-    return card;
-}
-
-function assignId(card, id) {
-    card.querySelector('.card__id').textContent = id;
-    return card;
-}
-
-export {
-    Card,
-    setLikeCounter,
-    pressLikeIfClientLiked,
-    disableDeleteIfNotOwner,
-    assignId
-};
+export { Card };
