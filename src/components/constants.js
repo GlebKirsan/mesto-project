@@ -6,9 +6,9 @@ export const profileName = '.profile__name';
 export const profileAvatar = '.profile__avatar-image';
 export const profileDescription = '.profile__description';
 
-export const editProfileButton = document.querySelector('.profile__edit-button');
-export const avatarEditButton = document.querySelector('.profile__avatar-edit-button');
-export const addCardButton = document.querySelector('.profile__add-button');
+export const buttonOpenPopupProfileEdit = document.querySelector('.profile__edit-button');
+export const buttonOpenPopupAvatarEdit = document.querySelector('.profile__avatar-edit-button');
+export const buttonOpenPopupAddCard = document.querySelector('.profile__add-button');
 
 export const cardsContainer = '.cards';
 export const popupImageSelector = '.popup_image-view';

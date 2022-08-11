@@ -25,7 +25,7 @@ import {
     popupProfileInfoSelector,
     popupEditAvatarSelector,
     popupAddCardSelector,
-    editProfileButton, newProfileNameElement, newProfileDescriptionElement, addCardButton, avatarEditButton
+    buttonOpenPopupProfileEdit, newProfileNameElement, newProfileDescriptionElement, buttonOpenPopupAddCard, buttonOpenPopupAvatarEdit
 } from "./components/constants";
 import FormValidator from "./components/FormValidator";
 import UserInfo from "./components/UserInfo"
@@ -88,15 +88,15 @@ const addCard = (event, button, inputValues) => {
 export const addCardPopup = new PopupWithForm(popupAddCardSelector, addCard);
 addCardPopup.setEventListeners();
 
-editProfileButton.addEventListener('click', () => {
+buttonOpenPopupProfileEdit.addEventListener('click', () => {
     const userData = userInfo.getUserInfo();
     newProfileNameElement.value = userData.name;
     newProfileDescriptionElement.value = userData.about;
 
     profileInfoPopup.open();
 });
-addCardButton.addEventListener('click', () => addCardPopup.open());
-avatarEditButton.addEventListener('click', () => editAvatarPopup.open());
+buttonOpenPopupAddCard.addEventListener('click', () => addCardPopup.open());
+buttonOpenPopupAvatarEdit.addEventListener('click', () => editAvatarPopup.open());
 
 Promise.all([api.getClientInfo(), api.getCards()])
     .then(([clientInfo, cards]) => {
