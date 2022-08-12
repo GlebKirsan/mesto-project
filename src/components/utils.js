@@ -35,9 +35,4 @@ function shortenNumber(number) {
     return number;
 }
 
-// const disableButton = button => {
-//     button.classList.add('popup__submit-button_inactive');
-//     button.disabled = true;
-// };
-
 export {checkImageAvailable, parseDateInCard, sortCardsByDateDescending, renderLoading, shortenNumber};
