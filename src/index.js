@@ -44,22 +44,24 @@ export let userInfo = new UserInfo({
 const imagePopup = new PopupWithImage(popupImageSelector);
 imagePopup.setEventListeners();
 
-const editProfileInfo = (event, button, inputValues) => {
+const editProfileInfo = (event, button, inputValues, closeCallback) => {
     renderLoading(true, button);
     const [name, description] = inputValues;
     api.updateClientInfo.call(api, name, description)
-        .then(response =>
+        .then(response => {
             userInfo.setUserInfo({
                 name: response.name,
                 about: response.about
-            }))
+            });
+            closeCallback();
+        })
         .catch(() => 'Ошибка обновления информации о профиле')
         .finally(() => renderLoading(false, button));
 };
 export const profileInfoPopup = new PopupWithForm(popupProfileInfoSelector, editProfileInfo);
 profileInfoPopup.setEventListeners();
 
-const editAvatar = (event, button, inputValues) => {
+const editAvatar = (event, button, inputValues, closeCallback) => {
     renderLoading(true, button);
     const [newAvatarUrl] = inputValues;
     api.editAvatar.call(api, newAvatarUrl)
@@ -67,6 +69,7 @@ const editAvatar = (event, button, inputValues) => {
             userInfo.setUserInfo({
                 avatarLink: response.avatar
             });
+            closeCallback();
             avatarForm.disableButton();
         })
         .finally(() => renderLoading(false, button));
@@ -74,13 +77,14 @@ const editAvatar = (event, button, inputValues) => {
 export const editAvatarPopup = new PopupWithForm(popupEditAvatarSelector, editAvatar);
 editAvatarPopup.setEventListeners();
 
-const addCard = (event, button, inputValues) => {
+const addCard = (event, button, inputValues, closeCallback) => {
     renderLoading(true, button);
     const [cardName, cardImageLink] = inputValues;
     api.createCard.call(api, cardName, cardImageLink)
         .then(card => createCard(card, _id))
         .then(card => {
             cardList.addItem(card)
+            closeCallback();
             newCardForm.disableButton(button);
         })
         .catch(() => 'Ошибка добавления карточки')

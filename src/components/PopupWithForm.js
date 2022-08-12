@@ -5,7 +5,7 @@ export default class PopupWithForm extends Popup {
         super(popupSelector);
         this._submitCallback = submitCallback;
         this._form = this._popup.querySelector('.popup__edit-area');
-        this._sumbitButton = this._popup.querySelector('.popup__submit-button');
+        this._submitButton = this._popup.querySelector('.popup__submit-button');
     }
 
     _getInputValues() {
@@ -23,8 +23,7 @@ export default class PopupWithForm extends Popup {
         super.setEventListeners();
         this._form.addEventListener('submit', (event) => {
             event.preventDefault();
-            this._submitCallback(event, this._sumbitButton, this._getInputValues());
-            this.close();
+            this._submitCallback(event, this._submitButton, this._getInputValues(), () => this.close());
         });
     }
 
