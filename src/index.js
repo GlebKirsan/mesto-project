@@ -20,7 +20,12 @@ import {
     popupProfileInfoSelector,
     popupEditAvatarSelector,
     popupAddCardSelector,
-    buttonOpenPopupProfileEdit, newProfileNameElement, newProfileDescriptionElement, buttonOpenPopupAddCard, buttonOpenPopupAvatarEdit
+    buttonOpenPopupProfileEdit,
+    newProfileNameElement,
+    newProfileDescriptionElement,
+    buttonOpenPopupAddCard,
+    buttonOpenPopupAvatarEdit,
+    likeActiveClass
 } from "./components/constants";
 import FormValidator from "./components/FormValidator";
 import UserInfo from "./components/UserInfo"
@@ -120,8 +125,6 @@ const createCard = (card, _id) => {
             const cardObj = new Card({
                 data: card,
                 handleCardClick: () => imagePopup.open(card.name, card.link),
-                handleCardLike: api.likeCard.bind(api),
-                handleCardUnlike: api.unlikeCard.bind(api),
                 handleCardDelete: api.deleteCard.bind(api)
             }, cardTemplate);
             cardObj.generate();
@@ -144,7 +147,21 @@ const createCard = (card, _id) => {
             cardElement.disableDeleteIfNotOwner(isCardOwner);
             return cardElement;
         })
-        .then(cardElement => cardElement.returnElement())
+        .then(cardElement => {
+            cardElement.getLikeButton().addEventListener('click', event => {
+                const method = event.target.classList.contains(likeActiveClass)
+                    ? api.unlikeCard.bind(api)
+                    : api.likeCard.bind(api);
+                method(card._id)
+                    .then(newLikesNumber => {
+                        cardElement.toggleLike();
+                        cardElement.setLikeCounter(newLikesNumber);
+                    })
+                    .catch(() => 'Ошибка при нажатии на лайк');
+            });
+            return cardElement;
+        })
+        .then(cardElement => cardElement.getElement())
 }
 
 const params = {

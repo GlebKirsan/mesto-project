@@ -2,13 +2,11 @@ import {shortenNumber} from "./utils";
 import {likeActiveClass} from "./constants";
 
 export default class Card {
-    constructor({ data, handleCardClick, handleCardLike, handleCardUnlike, handleCardDelete }, selector) {
+    constructor({ data, handleCardClick, handleCardDelete }, selector) {
         this._name = data.name;
         this._link = data.link;
         this._selector = selector;
         this._handleCardClick = handleCardClick;
-        this._handleCardLike = handleCardLike;
-        this._handleCardUnlike = handleCardUnlike;
         this._handleCardDelete = handleCardDelete;
     }
 
@@ -20,19 +18,8 @@ export default class Card {
             .cloneNode(true);
     }
 
-    _likeListener() {
-        const cardId = this._getCardId();
-        const method = this._likeElement.classList.contains(likeActiveClass)
-            ? this._handleCardUnlike
-            : this._handleCardLike;
-        method(cardId)
-            .then(newLikesNumber => this._updateLikes(newLikesNumber))
-            .catch(() => 'Ошибка при нажатии на лайк');
-    }
-
-    _updateLikes(likesNumber) {
+    toggleLike() {
         this._likeElement.classList.toggle(likeActiveClass);
-        this.setLikeCounter(likesNumber);
     }
 
     setLikeCounter(likesNumber) {
@@ -46,14 +33,13 @@ export default class Card {
             .catch(() => console.error(`Ошибка удаления карточки ${cardId}`))
             .catch(() => 'Ошибка при удалении карточки');
         this._element = null;
-        }
+    }
 
     _getCardId() {
         return this._element.querySelector('.card__id').textContent;
     }
 
     _setEventListeners() {
-        this._likeElement.addEventListener('click', () => this._likeListener());
         this._element.querySelector('.card__delete').addEventListener('click', () => this._deleteListener());
         this._cardImageElement.addEventListener('click', this._handleCardClick);
     }
@@ -88,7 +74,11 @@ export default class Card {
         }
     }
 
-    returnElement () {
+    getElement() {
         return this._element;
+    }
+
+    getLikeButton() {
+        return this._likeElement;
     }
 }
