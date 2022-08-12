@@ -28,8 +28,8 @@
 .card__like_active{background-image:url(fe17a515669479b1e649.svg)}
 .footer{margin:auto;max-width:880px;padding:66px 0 60px;width:100%}@media screen and (max-width:1080px){.footer{max-width:100%;padding:48px 0 36px;width:calc(100% - 38px)}}
 .footer__copyright{color:#545454;font-size:18px;line-height:1.21;margin:0}@media screen and (max-width:1080px){.footer__copyright{font-size:14px}}
-.popup{background-color:rgba(0,0,0,.5);bottom:0;cursor:pointer;justify-content:center;left:0;opacity:0;position:fixed;right:0;top:0;visibility:hidden;z-index:1}
-.popup_opened{display:flex;opacity:1;transition:opacity .3s linear,visibility .3s linear;visibility:visible}
+.popup{background-color:rgba(0,0,0,.5);bottom:0;cursor:pointer;display:flex;justify-content:center;left:0;opacity:0;position:fixed;right:0;top:0;transition:opacity .3s linear,visibility .3s linear;visibility:hidden;z-index:1}
+.popup_opened{opacity:1;visibility:visible}
 .popup_image-view{background-color:rgba(0,0,0,.9)}
 .popup__figure-container{align-self:center;cursor:default;max-width:75vw;position:relative}
 .popup__figure{margin:0}
