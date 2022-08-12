@@ -38,7 +38,8 @@ let cardList;
 export let userInfo = new UserInfo({
     nameSelector: profileName,
     aboutSelector: profileDescription,
-    avatarSelector: profileAvatar});
+    avatarSelector: profileAvatar
+});
 
 const imagePopup = new PopupWithImage(popupImageSelector);
 imagePopup.setEventListeners();
@@ -131,15 +132,20 @@ const createCard = (card, _id) => {
             return cardObj;
         })
         .then(cardElement => {
-            cardElement.assignId(card._id);
-            return cardElement;
-        })
-        .then(cardElement => {
             cardElement.setLikeCounter(card.likes.length)
             return cardElement;
         })
         .then(cardElement => {
             cardElement.pressLikeIfClientLiked(card.likes, _id);
+            return cardElement;
+        })
+        .then(cardElement => {
+            cardElement.getDeleteButton().addEventListener('click', () => {
+                api.deleteCard.call(api, card._id)
+                    .then(() => cardElement.delete())
+                    .catch(() => console.error(`Ошибка удаления карточки ${card._id}`))
+                    .catch(() => 'Ошибка при удалении карточки');
+            });
             return cardElement;
         })
         .then(cardElement => {

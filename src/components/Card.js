@@ -2,12 +2,11 @@ import {shortenNumber} from "./utils";
 import {likeActiveClass} from "./constants";
 
 export default class Card {
-    constructor({ data, handleCardClick, handleCardDelete }, selector) {
+    constructor({ data, handleCardClick }, selector) {
         this._name = data.name;
         this._link = data.link;
         this._selector = selector;
         this._handleCardClick = handleCardClick;
-        this._handleCardDelete = handleCardDelete;
     }
 
     _getElement() {
@@ -26,21 +25,12 @@ export default class Card {
         this._element.querySelector('.card__likes-counter').textContent = shortenNumber(likesNumber);
     }
 
-    _deleteListener() {
-        const cardId = this._getCardId();
-        this._handleCardDelete(cardId)
-            .then(() => this._element.closest('.card').remove())
-            .catch(() => console.error(`Ошибка удаления карточки ${cardId}`))
-            .catch(() => 'Ошибка при удалении карточки');
+    delete() {
+        this._element.closest('.card').remove();
         this._element = null;
     }
 
-    _getCardId() {
-        return this._element.querySelector('.card__id').textContent;
-    }
-
     _setEventListeners() {
-        this._element.querySelector('.card__delete').addEventListener('click', () => this._deleteListener());
         this._cardImageElement.addEventListener('click', this._handleCardClick);
     }
 
@@ -55,10 +45,6 @@ export default class Card {
         this._likeElement = this._element.querySelector('.card__like');
 
         this._setEventListeners();
-    }
-
-    assignId(id) {
-        this._element.querySelector('.card__id').textContent = id;
     }
 
     disableDeleteIfNotOwner(isCardOwner) {
@@ -80,5 +66,9 @@ export default class Card {
 
     getLikeButton() {
         return this._likeElement;
+    }
+
+    getDeleteButton() {
+        return this._element.querySelector('.card__delete');
     }
 }
