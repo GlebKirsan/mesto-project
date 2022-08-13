@@ -24,8 +24,7 @@ import {
     newProfileNameElement,
     newProfileDescriptionElement,
     buttonOpenPopupAddCard,
-    buttonOpenPopupAvatarEdit,
-    likeActiveClass
+    buttonOpenPopupAvatarEdit
 } from "./components/constants";
 import FormValidator from "./components/FormValidator";
 import UserInfo from "./components/UserInfo"
@@ -124,54 +123,36 @@ Promise.all([api.getClientInfo(), api.getCards()])
         cardList.renderItems();
     });
 
+const likeCallback = (cardElement, cardId) => {
+    const method = cardElement.isLiked() ? api.unlikeCard.bind(api) : api.likeCard.bind(api);
+    method(cardId)
+        .then(newLikesNumber => {
+            cardElement.toggleLike();
+            cardElement.setLikeCounter(newLikesNumber);
+        })
+        .catch(() => 'Ошибка при нажатии на лайк');
+}
+
+const deleteCallback = (cardElement, cardId) => {
+    api.deleteCard.call(api, cardId)
+        .then(() => cardElement.delete())
+        .catch(() => console.error(`Ошибка удаления карточки ${cardId}`))
+        .catch(() => 'Ошибка при удалении карточки');
+};
+
 const createCard = (card, _id) => {
     return checkImageAvailable(card.link)
         .then(() => {
             const cardObj = new Card({
                 data: card,
-                handleCardClick: () => imagePopup.open(card.name, card.link),
-                handleCardDelete: api.deleteCard.bind(api)
+                cardClickCallback: () => imagePopup.open(card.name, card.link),
+                likeCallback: () => likeCallback(cardObj, card._id),
+                deleteCallback: () => deleteCallback(cardObj, card._id),
+                isOwner: card.owner._id === _id,
+                clientLiked: card.likes.map(user => user._id).includes(_id)
             }, cardTemplate);
-            cardObj.generate();
-            return cardObj;
-        })
-        .then(cardElement => {
-            cardElement.setLikeCounter(card.likes.length)
-            return cardElement;
-        })
-        .then(cardElement => {
-            cardElement.pressLikeIfClientLiked(card.likes, _id);
-            return cardElement;
-        })
-        .then(cardElement => {
-            cardElement.getDeleteButton().addEventListener('click', () => {
-                api.deleteCard.call(api, card._id)
-                    .then(() => cardElement.delete())
-                    .catch(() => console.error(`Ошибка удаления карточки ${card._id}`))
-                    .catch(() => 'Ошибка при удалении карточки');
-            });
-            return cardElement;
-        })
-        .then(cardElement => {
-            const isCardOwner = card.owner._id === _id;
-            cardElement.disableDeleteIfNotOwner(isCardOwner);
-            return cardElement;
-        })
-        .then(cardElement => {
-            cardElement.getLikeButton().addEventListener('click', event => {
-                const method = event.target.classList.contains(likeActiveClass)
-                    ? api.unlikeCard.bind(api)
-                    : api.likeCard.bind(api);
-                method(card._id)
-                    .then(newLikesNumber => {
-                        cardElement.toggleLike();
-                        cardElement.setLikeCounter(newLikesNumber);
-                    })
-                    .catch(() => 'Ошибка при нажатии на лайк');
-            });
-            return cardElement;
-        })
-        .then(cardElement => cardElement.getElement())
+            return cardObj.generate();
+        });
 }
 
 const params = {

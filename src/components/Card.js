@@ -2,11 +2,16 @@ import {shortenNumber} from "./utils";
 import {likeActiveClass} from "./constants";
 
 export default class Card {
-    constructor({ data, handleCardClick }, selector) {
+    constructor({ data, cardClickCallback, likeCallback, deleteCallback, isOwner, clientLiked }, selector) {
         this._name = data.name;
         this._link = data.link;
+        this._initialLikes = data.likes.length;
         this._selector = selector;
-        this._handleCardClick = handleCardClick;
+        this._cardClickCallback = cardClickCallback;
+        this._likeCallback = likeCallback;
+        this._deleteCallback = deleteCallback;
+        this._isOwner = isOwner;
+        this._clientLiked = clientLiked;
     }
 
     _getElement() {
@@ -26,12 +31,14 @@ export default class Card {
     }
 
     delete() {
-        this._element.closest('.card').remove();
+        this._element.remove();
         this._element = null;
     }
 
     _setEventListeners() {
-        this._cardImageElement.addEventListener('click', this._handleCardClick);
+        this._cardImageElement.addEventListener('click', this._cardClickCallback);
+        this._likeElement.addEventListener('click', this._likeCallback);
+        this._element.querySelector('.card__delete').addEventListener('click', this._deleteCallback);
     }
 
     generate() {
@@ -44,31 +51,28 @@ export default class Card {
 
         this._likeElement = this._element.querySelector('.card__like');
 
+        this.setLikeCounter(this._initialLikes);
         this._setEventListeners();
+        this._disableDeleteIfNotOwner();
+        this._pressLikeIfClientLiked();
+
+        return this._element;
     }
 
-    disableDeleteIfNotOwner(isCardOwner) {
-        if (!isCardOwner) {
+    _disableDeleteIfNotOwner() {
+        if (!this._isOwner) {
             this._element.querySelector('.card__delete').remove();
         }
     }
 
-    pressLikeIfClientLiked(likes, clientId) {
-        const clientLiked = likes.map(user => user._id).includes(clientId);
-        if (clientLiked) {
-            this._element.querySelector('.card__like').classList.add('card__like_active');
+    _pressLikeIfClientLiked() {
+        if (this._clientLiked) {
+            this._element.querySelector('.card__like').classList.add(likeActiveClass);
         }
     }
 
-    getElement() {
-        return this._element;
+    isLiked() {
+        return this._likeElement.classList.contains(likeActiveClass);
     }
 
-    getLikeButton() {
-        return this._likeElement;
-    }
-
-    getDeleteButton() {
-        return this._element.querySelector('.card__delete');
-    }
 }
