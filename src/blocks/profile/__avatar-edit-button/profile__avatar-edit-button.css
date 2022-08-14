@@ -9,6 +9,7 @@
     background-size: 26px 26px;
     border: none;
     opacity: 0;
+    width: 100%;
 }
 
 .profile__avatar-edit-button:hover {
